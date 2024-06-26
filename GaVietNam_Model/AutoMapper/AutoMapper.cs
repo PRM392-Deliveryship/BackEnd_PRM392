@@ -15,10 +15,12 @@ namespace GaVietNam_Model.AutoMapper
         public AutoMapperProfile()
         {
             // Để region gộp từng cái theo rq và rp
+
             #region Chicken
             CreateMap<ChickenRequest, Chicken>().ReverseMap();
             CreateMap<Chicken, ChickenResponse>().ReverseMap();
             #endregion
+
         }
     }
 }

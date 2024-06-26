@@ -8,5 +8,9 @@ namespace GaVietNam_Model.DTO.Request
 {
     public class ChickenRequest
     {
+        public string Name { get; set; }
+
+        public decimal Price { get; set; }
+
     }
 }

@@ -56,24 +56,6 @@ namespace GaVietNam_API.Controllers.Chicken
             }
         }
 
-        [HttpGet("GetAllChickenByCategoryId/{id}")]
-        public async Task<IActionResult> GetAllChickenByCategoryId(long id)
-        {
-            try
-            {
-                var chickens = _chickenService.GetAllChickenByCategoryId(id);
-                return CustomResult("Category have those products:", chickens);
-            }
-            catch (CustomException.DataNotFoundException ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.NotFound);
-            }
-            catch (Exception ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
-            }
-        }
-
         [HttpGet("GetChickentById/{id}")]
         public async Task<IActionResult> GetChickentById(long id)
         {
