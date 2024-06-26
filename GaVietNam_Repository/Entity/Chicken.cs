@@ -17,7 +17,7 @@ public partial class Chicken
 
     public DateTime? ModifiedDate { get; set; }
 
-    public string? Status { get; set; }
+    public bool? Status { get; set; }
 
     public virtual ICollection<Kind> Kinds { get; set; } = new List<Kind>();
 
