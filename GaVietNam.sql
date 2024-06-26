@@ -14,27 +14,26 @@ CREATE TABLE Role (
     role_name VARCHAR(50) NOT NULL UNIQUE
 );
 
+-- Table Chicken
+CREATE TABLE Chicken (
+    id BIGINT PRIMARY KEY IDENTITY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL,
+    createDate DATETIME,
+    modifiedDate DATETIME,
+    status VARCHAR(255)
+);
+
 -- Table Kind
 CREATE TABLE Kind (
     id BIGINT PRIMARY KEY IDENTITY,
     kindName VARCHAR(50) NOT NULL,
     image VARCHAR(255),
     quantity INT NOT NULL,
-    status VARCHAR(255) NOT NULL
-);
-
--- Table Chicken
-CREATE TABLE Chicken (
-    id BIGINT PRIMARY KEY IDENTITY,
-    name VARCHAR(255) NOT NULL,
-    kind_id BIGINT,
-    price DECIMAL(10, 2) NOT NULL,
-    whole_or_half VARCHAR(50) NOT NULL,
-    stock INT NOT NULL,
-    createDate DATETIME,
-    modifiedDate DATETIME,
-    status VARCHAR(255),
-    FOREIGN KEY (kind_id) REFERENCES Kind(id)
+    status VARCHAR(255) NOT NULL,
+    chicken_id BIGINT,
+    FOREIGN KEY (chicken_id) REFERENCES Chicken(id)
 );
 
 -- Table User
@@ -109,16 +108,19 @@ CREATE TABLE Bill (
 INSERT INTO Role (role_name) VALUES ('Admin');
 INSERT INTO Role (role_name) VALUES ('User');
 
--- Insert sample data into Kind table
-INSERT INTO Kind (kindName, image, quantity, status) VALUES ('Regular', 'regular.jpg', 100, 'Active');
-INSERT INTO Kind (kindName, image, quantity, status) VALUES ('Premium', 'premium.jpg', 50, 'Active');
-
 -- Insert sample data into Chicken table
-INSERT INTO Chicken (name, kind_id, price, whole_or_half, stock, createDate, modifiedDate, status)
-VALUES ('Whole Regular Chicken', 1, 15.99, 'whole', 50, GETDATE(), GETDATE(), 'Available');
+INSERT INTO Chicken (name, price, stock, createDate, modifiedDate, status)
+VALUES ('Whole Regular Chicken', 15.99, 50, GETDATE(), GETDATE(), 'Available');
 
-INSERT INTO Chicken (name, kind_id, price, whole_or_half, stock, createDate, modifiedDate, status)
-VALUES ('Half Premium Chicken', 2, 12.99, 'half', 30, GETDATE(), GETDATE(), 'Available');
+INSERT INTO Chicken (name, price, stock, createDate, modifiedDate, status)
+VALUES ('Half Premium Chicken', 12.99, 30, GETDATE(), GETDATE(), 'Available');
+
+-- Insert sample data into Kind table
+INSERT INTO Kind (kindName, image, quantity, status, chicken_id)
+VALUES ('Regular', 'regular.jpg', 100, 'Active', 1);
+
+INSERT INTO Kind (kindName, image, quantity, status, chicken_id)
+VALUES ('Premium', 'premium.jpg', 50, 'Active', 2);
 
 -- Insert sample data into User table
 INSERT INTO [User] (username, password, identity_card, dob, phone, create_date, status, role_id)
