@@ -11,8 +11,7 @@ public partial class GaVietNamContext : DbContext
     {
     }
 
-    public GaVietNamContext(DbContextOptions<GaVietNamContext> options)
-        : base(options)
+    public GaVietNamContext(DbContextOptions<GaVietNamContext> options) : base(options)
     {
     }
 
