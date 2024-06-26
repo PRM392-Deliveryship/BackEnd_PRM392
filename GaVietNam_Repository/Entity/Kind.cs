@@ -13,7 +13,7 @@ public partial class Kind
 
     public int Quantity { get; set; }
 
-    public string Status { get; set; } = null!;
+    public bool? Status { get; set; }
 
     public long? ChickenId { get; set; }
 
