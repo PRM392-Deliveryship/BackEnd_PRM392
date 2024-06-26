@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace GaVietNam_Repository.Entities;
+namespace GaVietNam_Repository.Entity;
 
 public partial class GaVietNamContext : DbContext
 {
@@ -11,7 +11,8 @@ public partial class GaVietNamContext : DbContext
     {
     }
 
-    public GaVietNamContext(DbContextOptions<GaVietNamContext> options) : base(options)
+    public GaVietNamContext(DbContextOptions<GaVietNamContext> options)
+        : base(options)
     {
     }
 
@@ -53,11 +54,11 @@ public partial class GaVietNamContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Admin__3213E83FB6EA4C0C");
+            entity.HasKey(e => e.Id).HasName("PK__Admin__3213E83FABE2712A");
 
             entity.ToTable("Admin");
 
-            entity.HasIndex(e => e.Username, "UQ__Admin__F3DBC57225162E18").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Admin__F3DBC5729C4B849B").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Password)
@@ -77,7 +78,7 @@ public partial class GaVietNamContext : DbContext
 
         modelBuilder.Entity<Bill>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Bill__3213E83FCB96673E");
+            entity.HasKey(e => e.Id).HasName("PK__Bill__3213E83F3A3066D0");
 
             entity.ToTable("Bill");
 
@@ -95,7 +96,7 @@ public partial class GaVietNamContext : DbContext
 
         modelBuilder.Entity<Chicken>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Chicken__3213E83F1C711969");
+            entity.HasKey(e => e.Id).HasName("PK__Chicken__3213E83F8F0D2621");
 
             entity.ToTable("Chicken");
 
@@ -103,7 +104,6 @@ public partial class GaVietNamContext : DbContext
             entity.Property(e => e.CreateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("createDate");
-            entity.Property(e => e.KindId).HasColumnName("kind_id");
             entity.Property(e => e.ModifiedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("modifiedDate");
@@ -119,19 +119,11 @@ public partial class GaVietNamContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("status");
             entity.Property(e => e.Stock).HasColumnName("stock");
-            entity.Property(e => e.WholeOrHalf)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("whole_or_half");
-
-            entity.HasOne(d => d.Kind).WithMany(p => p.Chickens)
-                .HasForeignKey(d => d.KindId)
-                .HasConstraintName("FK__Chicken__kind_id__3C69FB99");
         });
 
         modelBuilder.Entity<Contact>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Contact__3213E83FEA06CB94");
+            entity.HasKey(e => e.Id).HasName("PK__Contact__3213E83F23CE4B61");
 
             entity.ToTable("Contact");
 
@@ -164,11 +156,12 @@ public partial class GaVietNamContext : DbContext
 
         modelBuilder.Entity<Kind>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Kind__3213E83F6B304746");
+            entity.HasKey(e => e.Id).HasName("PK__Kind__3213E83F73C4EC3D");
 
             entity.ToTable("Kind");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ChickenId).HasColumnName("chicken_id");
             entity.Property(e => e.Image)
                 .HasMaxLength(255)
                 .IsUnicode(false)
@@ -182,11 +175,15 @@ public partial class GaVietNamContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("status");
+
+            entity.HasOne(d => d.Chicken).WithMany(p => p.Kinds)
+                .HasForeignKey(d => d.ChickenId)
+                .HasConstraintName("FK__Kind__chicken_id__3C69FB99");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3213E83F2AB99A73");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3213E83FBC03EFBC");
 
             entity.ToTable("Order");
 
@@ -227,7 +224,7 @@ public partial class GaVietNamContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__OrderIte__3213E83F87C41B18");
+            entity.HasKey(e => e.Id).HasName("PK__OrderIte__3213E83F3B559E04");
 
             entity.ToTable("OrderItem");
 
@@ -250,11 +247,11 @@ public partial class GaVietNamContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3213E83F717131E6");
+            entity.HasKey(e => e.Id).HasName("PK__Role__3213E83F8DFCAB81");
 
             entity.ToTable("Role");
 
-            entity.HasIndex(e => e.RoleName, "UQ__Role__783254B12C39D3F1").IsUnique();
+            entity.HasIndex(e => e.RoleName, "UQ__Role__783254B13420047D").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.RoleName)
@@ -265,13 +262,13 @@ public partial class GaVietNamContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3213E83F610A1EC6");
+            entity.HasKey(e => e.Id).HasName("PK__User__3213E83F7FCB0AEB");
 
             entity.ToTable("User");
 
-            entity.HasIndex(e => e.IdentityCard, "UQ__User__4943C3B4D5ECAAF5").IsUnique();
+            entity.HasIndex(e => e.IdentityCard, "UQ__User__4943C3B4B614F364").IsUnique();
 
-            entity.HasIndex(e => e.Username, "UQ__User__F3DBC572783FF7DB").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__User__F3DBC572FC21F63E").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreateDate)

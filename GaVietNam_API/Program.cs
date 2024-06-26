@@ -1,6 +1,6 @@
 using AutoMapper;
 using GaVietNam_Model.AutoMapper;
-using GaVietNam_Repository.Entities;
+using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
 using GaVietNam_Service.Interface;
 using GaVietNam_Service.Service;

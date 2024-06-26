@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
+    <PackageReference Include="Firebase.Auth" Version="1.0.0" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GaVietNam_Repository\GaVietNam_Repository.csproj" />
   </ItemGroup>
 

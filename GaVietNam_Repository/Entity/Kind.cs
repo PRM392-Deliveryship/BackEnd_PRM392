@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GaVietNam_Repository.Entities;
+namespace GaVietNam_Repository.Entity;
 
 public partial class Kind
 {
@@ -15,5 +15,7 @@ public partial class Kind
 
     public string Status { get; set; } = null!;
 
-    public virtual ICollection<Chicken> Chickens { get; set; } = new List<Chicken>();
+    public long? ChickenId { get; set; }
+
+    public virtual Chicken? Chicken { get; set; }
 }

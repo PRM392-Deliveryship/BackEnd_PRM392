@@ -1,4 +1,4 @@
-﻿using GaVietNam_Repository.Entities;
+﻿using GaVietNam_Repository.Entity;
 
 namespace GaVietNam_Repository.Repository
 {

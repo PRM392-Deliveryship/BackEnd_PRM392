@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GaVietNam_Model.DTO.Request;
 using GaVietNam_Model.DTO.Response;
-using GaVietNam_Repository.Entities;
+using GaVietNam_Repository.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

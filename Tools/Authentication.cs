@@ -1,5 +1,5 @@
 ﻿
-using GaVietNam_Repository.Entities;
+using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

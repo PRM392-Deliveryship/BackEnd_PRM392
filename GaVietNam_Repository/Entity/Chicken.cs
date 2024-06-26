@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GaVietNam_Repository.Entities;
+namespace GaVietNam_Repository.Entity;
 
 public partial class Chicken
 {
@@ -9,11 +9,7 @@ public partial class Chicken
 
     public string Name { get; set; } = null!;
 
-    public long? KindId { get; set; }
-
     public decimal Price { get; set; }
-
-    public string WholeOrHalf { get; set; } = null!;
 
     public int Stock { get; set; }
 
@@ -23,7 +19,7 @@ public partial class Chicken
 
     public string? Status { get; set; }
 
-    public virtual Kind? Kind { get; set; }
+    public virtual ICollection<Kind> Kinds { get; set; } = new List<Kind>();
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

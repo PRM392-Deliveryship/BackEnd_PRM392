@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\" />
-    <Folder Include="Service\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GaVietNam_Model\GaVietNam_Model.csproj" />
     <ProjectReference Include="..\GaVietNam_Repository\GaVietNam_Repository.csproj" />
     <ProjectReference Include="..\Tools\Tools.csproj" />

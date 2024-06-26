@@ -1,4 +1,4 @@
-﻿using GaVietNam_Repository.Entities;
+﻿using GaVietNam_Repository.Entity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

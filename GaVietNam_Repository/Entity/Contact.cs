@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GaVietNam_Repository.Entities;
+namespace GaVietNam_Repository.Entity;
 
 public partial class Contact
 {

@@ -7,23 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CoreApiResponse" Version="1.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GaVietNam_Model\GaVietNam_Model.csproj" />
     <ProjectReference Include="..\GaVietNam_Repository\GaVietNam_Repository.csproj" />
     <ProjectReference Include="..\GaVietNam_Service\GaVietNam_Service.csproj" />
     <ProjectReference Include="..\Tools\Tools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Chicken\" />
-    <Folder Include="Controllers\Kind\" />
-    <Folder Include="Controllers\Bill\" />
-    <Folder Include="Controllers\Contact\" />
-    <Folder Include="Controllers\Role\" />
-    <Folder Include="Controllers\Order\" />
-    <Folder Include="Controllers\User\" />
   </ItemGroup>
 
 </Project>
