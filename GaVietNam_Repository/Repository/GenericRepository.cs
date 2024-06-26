@@ -60,31 +60,31 @@ namespace GaVietNam_Repository.Repository
             return dbSet.Find(id);
         }
 
-        public virtual void Insert(TEntity entity)
+        public virtual void Insert(TEntity Entity)
         {
-            dbSet.Add(entity);
+            dbSet.Add(Entity);
             context.SaveChanges();
         }
 
         public virtual void Delete(object id)
         {
-            TEntity entityToDelete = dbSet.Find(id);
-            Delete(entityToDelete);
+            TEntity EntityToDelete = dbSet.Find(id);
+            Delete(EntityToDelete);
         }
 
-        public virtual void Delete(TEntity entityToDelete)
+        public virtual void Delete(TEntity EntityToDelete)
         {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            if (context.Entry(EntityToDelete).State == EntityState.Detached)
             {
-                dbSet.Attach(entityToDelete);
+                dbSet.Attach(EntityToDelete);
             }
-            dbSet.Remove(entityToDelete);
+            dbSet.Remove(EntityToDelete);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public virtual void Update(TEntity EntityToUpdate)
         {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            dbSet.Attach(EntityToUpdate);
+            context.Entry(EntityToUpdate).State = EntityState.Modified;
         }
 
 

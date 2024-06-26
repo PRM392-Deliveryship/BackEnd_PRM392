@@ -14,10 +14,10 @@ namespace GaVietNam_Repository.Repository
             int? pageSize = null);
 
         TEntity GetByID(object id);
-        void Insert(TEntity entity);
+        void Insert(TEntity Entity);
         void Delete(object id);
-        void Delete(TEntity entityToDelete);
-        void Update(TEntity entityToUpdate);
+        void Delete(TEntity EntityToDelete);
+        void Update(TEntity EntityToUpdate);
 
         bool Exists(Expression<Func<TEntity, bool>> filter);
     }
