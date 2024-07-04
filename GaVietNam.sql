@@ -22,7 +22,7 @@ CREATE TABLE Chicken (
     stock INT NOT NULL,
     createDate DATETIME,
     modifiedDate DATETIME,
-    status VARCHAR(255)
+    status bit
 );
 
 -- Table Kind
@@ -31,7 +31,7 @@ CREATE TABLE Kind (
     kindName VARCHAR(50) NOT NULL,
     image VARCHAR(255),
     quantity INT NOT NULL,
-    status VARCHAR(255) NOT NULL,
+    status bit,
     chicken_id BIGINT,
     FOREIGN KEY (chicken_id) REFERENCES Chicken(id)
 );
@@ -110,17 +110,17 @@ INSERT INTO Role (role_name) VALUES ('User');
 
 -- Insert sample data into Chicken table
 INSERT INTO Chicken (name, price, stock, createDate, modifiedDate, status)
-VALUES ('Whole Regular Chicken', 15.99, 50, GETDATE(), GETDATE(), 'Available');
+VALUES ('Whole Regular Chicken', 15.99, 50, GETDATE(), GETDATE(), 1);
 
 INSERT INTO Chicken (name, price, stock, createDate, modifiedDate, status)
-VALUES ('Half Premium Chicken', 12.99, 30, GETDATE(), GETDATE(), 'Available');
+VALUES ('Half Premium Chicken', 12.99, 30, GETDATE(), GETDATE(), 1);
 
 -- Insert sample data into Kind table
 INSERT INTO Kind (kindName, image, quantity, status, chicken_id)
-VALUES ('Regular', 'regular.jpg', 100, 'Active', 1);
+VALUES ('Regular', 'regular.jpg', 100, 1, 1);
 
 INSERT INTO Kind (kindName, image, quantity, status, chicken_id)
-VALUES ('Premium', 'premium.jpg', 50, 'Active', 2);
+VALUES ('Premium', 'premium.jpg', 50, 1, 2);
 
 -- Insert sample data into User table
 INSERT INTO [User] (username, password, identity_card, dob, phone, create_date, status, role_id)

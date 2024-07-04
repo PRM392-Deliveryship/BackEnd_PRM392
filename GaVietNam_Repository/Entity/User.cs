@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GaVietNam_Repository.Entity;
 
@@ -7,25 +8,28 @@ public partial class User
 {
     public long Id { get; set; }
 
-    public string Username { get; set; } = null!;
+    public long RoleId { get; set; }
 
-    public string Password { get; set; } = null!;
+    public string Username { get; set; }
 
-    public string IdentityCard { get; set; } = null!;
+    public string Password { get; set; }
 
-    public DateOnly Dob { get; set; }
+    public string FullName { get; set; }
 
-    public string Phone { get; set; } = null!;
+    public string Avatar { get; set; }
 
-    public DateOnly? CreateDate { get; set; }
+    public string Gender { get; set; }
 
-    public string Status { get; set; } = null!;
+    public string IdentityCard { get; set; }
 
-    public long? RoleId { get; set; }
+    public DateTime Dob { get; set; }
 
-    public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
+    public string Phone { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public DateTime CreateDate { get; set; }
 
-    public virtual Role? Role { get; set; }
+    public bool Status { get; set; }
+
+    [ForeignKey("RoleId")]
+    public virtual Role Role { get; set; }
 }

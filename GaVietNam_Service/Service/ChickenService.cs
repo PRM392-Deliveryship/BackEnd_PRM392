@@ -23,57 +23,6 @@ namespace GaVietNam_Service.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
-        public async Task<ChickenResponse> CreateChicken(ChickenRequest chickenRequest)
-        {
-            var existingChicken = _unitOfWork.ChickenRepository.Get().FirstOrDefault(p => p.Name.ToLower() == chickenRequest.Name.ToLower());
-
-            if (existingChicken != null)
-            {
-                throw new CustomException.DataExistException($"Chicken with name '{chickenRequest.Name}' already exists.");
-            }
-            var newChicken = _mapper.Map<Chicken>(chickenRequest);
-            newChicken.CreateDate = DateTime.UtcNow;
-            newChicken.Status = true;
-
-            var chickenResponse = _mapper.Map<ChickenResponse>(existingChicken);
-
-            _unitOfWork.ChickenRepository.Insert(newChicken);
-            _unitOfWork.Save();
-
-            _mapper.Map(newChicken, chickenResponse);
-            return chickenResponse;
-        }
-
-        public async Task<bool> DeleteChicken(long id)
-        {
-            try
-            {
-                var chicken = _unitOfWork.ChickenRepository.GetByID(id);
-                if (chicken == null)
-                {
-                    throw new CustomException.DataNotFoundException("Chicken not found.");
-                }
-
-                /*var kinds = _unitOfWork.KindRepository.Get().Where(p => p.ChickenId == id);
-                foreach (var kind in kinds)
-                {
-                    kind.Status = false;
-                    _unitOfWork.KindRepository.Update(kind);
-                }
-
-                product.Status = false;
-                _unitOfWork.ProductRepository.Update(product);
-                _unitOfWork.Save();*/
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public async Task<List<ChickenResponse>> GetAllChicken(QueryObject queryObject)
         {
             var chickens = _unitOfWork.ChickenRepository.Get(
@@ -119,9 +68,84 @@ namespace GaVietNam_Service.Service
             return chickenResponse;
         }
 
+        public async Task<ChickenResponse> CreateChicken(ChickenRequest chickenRequest)
+        {
+            var existingChicken = _unitOfWork.ChickenRepository.Get().FirstOrDefault(p => p.Name.ToLower() == chickenRequest.Name.ToLower());
+
+            if (existingChicken != null)
+            {
+                throw new CustomException.DataExistException($"Chicken with name '{chickenRequest.Name}' already exists.");
+            }
+            var newChicken = _mapper.Map<Chicken>(chickenRequest);
+            newChicken.CreateDate = DateTime.UtcNow;
+            newChicken.Status = true;
+
+            var chickenResponse = _mapper.Map<ChickenResponse>(existingChicken);
+
+            _unitOfWork.ChickenRepository.Insert(newChicken);
+            _unitOfWork.Save();
+
+            _mapper.Map(newChicken, chickenResponse);
+            return chickenResponse;
+        }
         public async Task<ChickenResponse> UpdateChicken(long id, ChickenRequest chickenRequest)
         {
-            throw new NotImplementedException();
+            var existingChicken = _unitOfWork.ChickenRepository.GetByID(id);
+
+            if (existingChicken == null)
+            {
+                throw new CustomException.DataNotFoundException($"Chicken with ID {id} not found.");
+            }
+
+            if (existingChicken.Name.ToLower() != chickenRequest.Name.ToLower())
+            {
+                var duplicateExists = _unitOfWork.ChickenRepository.Get((p => p.Id != id
+                                                                                      && p.Name.ToLower() == chickenRequest.Name.ToLower()));
+
+                if (duplicateExists == null)
+                {
+                    throw new CustomException.DataExistException($"Chicken with name '{chickenRequest.Name}' already exists.");
+                }
+            }
+
+            // 3. Update Product Properties
+            _mapper.Map(chickenRequest, existingChicken);
+            existingChicken.ModifiedDate = DateTime.Now;
+
+            _unitOfWork.Save();
+
+            var chickenReponse = _mapper.Map<ChickenResponse>(existingChicken);
+
+            return chickenReponse;
+        }
+
+        public async Task<bool> DeleteChicken(long id)
+        {
+            try
+            {
+                var chicken = _unitOfWork.ChickenRepository.GetByID(id);
+                if (chicken == null)
+                {
+                    throw new CustomException.DataNotFoundException("Chicken not found.");
+                }
+
+                var kinds = _unitOfWork.KindRepository.Get().Where(p => p.ChickenId == id);
+                foreach (var kind in kinds)
+                {
+                    kind.Status = false;
+                    _unitOfWork.KindRepository.Update(kind);
+                }
+
+                chicken.Status = false;
+                _unitOfWork.ChickenRepository.Update(chicken);
+                _unitOfWork.Save();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

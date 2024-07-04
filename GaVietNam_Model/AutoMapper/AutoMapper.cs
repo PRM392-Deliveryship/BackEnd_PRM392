@@ -16,10 +16,39 @@ namespace GaVietNam_Model.AutoMapper
         {
             // Để region gộp từng cái theo rq và rp
 
+            #region Admin
+            CreateMap<AdminRequest, Admin>().ReverseMap();
+            CreateMap<Admin, AdminResponse>()
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
+            CreateMap<Admin, LoginResponse>();
+            #endregion
+
             #region Chicken
             CreateMap<ChickenRequest, Chicken>().ReverseMap();
             CreateMap<Chicken, ChickenResponse>().ReverseMap();
             #endregion
+
+            #region Kind
+            CreateMap<KindRequest, Kind>().ReverseMap();
+            CreateMap<UpdateKindRequest, Kind>().ReverseMap();
+            CreateMap<Kind, KindResponse>().ReverseMap();
+            #endregion
+
+            #region Contact
+            CreateMap<CreateContactRequest, Contact>().ReverseMap();
+            CreateMap<Contact, ContactResponse>().ReverseMap();
+            #endregion
+
+            #region Role
+            CreateMap<RoleRequest, Role>().ReverseMap();
+            CreateMap<Role,  RoleResponse>().ReverseMap();
+            #endregion
+
+            #region User
+            CreateMap<UserRequest, User>().ReverseMap();
+            CreateMap<User, UserReponse>().ReverseMap();
+            #endregion
+
 
         }
     }

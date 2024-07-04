@@ -36,268 +36,67 @@ public partial class GaVietNamContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Chỉ cấu hình nếu options chưa được cấu hình
         if (!optionsBuilder.IsConfigured)
         {
-            // Lấy chuỗi kết nối từ IConfiguration
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            // Sử dụng chuỗi kết nối đã lấy được
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json")
+               .Build();
+            var connectionString = configuration.GetConnectionString("MyDB");
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Admin>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Admin__3213E83FE83227AE");
+        base.OnModelCreating(modelBuilder);
 
-            entity.ToTable("Admin");
+        // Seed data for Roles
+        modelBuilder.Entity<Role>().HasData(
+            new Role { Id = 1, RoleName = "Admin" },
+            new Role { Id = 2, RoleName = "Manager" },
+            new Role { Id = 3, RoleName = "Customer" }
+        );
 
-            entity.HasIndex(e => e.Username, "UQ__Admin__F3DBC572A508387F").IsUnique();
+        // Seed data for Admins
+        //string plaintextPassword = "admin"; // Original password
+        //string hashedPassword = HashPassword(plaintextPassword); // Encrypt password using SHA-512
+        modelBuilder.Entity<Admin>().HasData(
+                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = "1", Status = true }
+        );
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Password)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("password");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.Username)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("username");
+        // Seed data for Contacts
+        modelBuilder.Entity<Contact>().HasData(
+            new Contact { Id = 1, Phone = "123456789", Email = "contact1@example.com", Facebook = "facebook1", Instagram = "instagram1", Tiktok = "tiktok1", Shoppee = "shoppee1" }
+        );
 
-            entity.HasOne(d => d.User).WithMany(p => p.Admins)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Admin__user_id__45F365D3");
-        });
+        // Seed data for Kinds
+        modelBuilder.Entity<Kind>().Property(k => k.Image).IsRequired(false);
+        modelBuilder.Entity<Kind>().HasData(
+           new Kind { Id = 1, ChickenId = 1, KindName = "Xào", Image = "image1.jpg", Quantity = 5, Status = true },
+           new Kind { Id = 2, ChickenId = 1, KindName = "Luộc", Image = "image2.jpg", Quantity = 5, Status = true },
+           new Kind { Id = 3, ChickenId = 2, KindName = "Gỏi", Image = "image1.jpg", Quantity = 5, Status = true },
+           new Kind { Id = 4, ChickenId = 2, KindName = "Nướng", Image = "image2.jpg", Quantity = 5, Status = true }
+        );
 
-        modelBuilder.Entity<Bill>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Bill__3213E83FD5F3FCFD");
+        //Seed data for chicken
+        modelBuilder.Entity<Chicken>().HasData(
+            new Chicken { Id = 1, Name = "Gà Tam Hoàng", Price = 1000000, Stock = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+            new Chicken { Id = 2, Name = "Gà Ta", Price = 2000000, Stock = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
+            );
 
-            entity.ToTable("Bill");
+        //Seed data for Order
+        modelBuilder.Entity<Order>().HasData(
+            new Order { Id = 1, UserId = 1, AdminId = 1, OrderRequirement = "ahihi", OrderCode = "ahihi", PaymentMethod = "ahihi", CreateDate = DateTime.Now, TotalPrice = 1000000, Status = "Successful" }
+            );
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.Status)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("status");
+        //Seed data for OrderItem
+        modelBuilder.Entity<OrderItem>().HasData(
+            new OrderItem { Id = 1, ChickenId = 1, OrderId = 1, Quantity = 1, Price = 1000000 }
+            );
 
-            entity.HasOne(d => d.Order).WithMany(p => p.Bills)
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__Bill__order_id__52593CB8");
-        });
-
-        modelBuilder.Entity<Chicken>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Chicken__3213E83FB58B6E96");
-
-            entity.ToTable("Chicken");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasColumnType("datetime")
-                .HasColumnName("createDate");
-            entity.Property(e => e.ModifiedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("modifiedDate");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("name");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("price");
-            entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.Stock).HasColumnName("stock");
-        });
-
-        modelBuilder.Entity<Contact>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Contact__3213E83FF742C63A");
-
-            entity.ToTable("Contact");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Email)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("email");
-            entity.Property(e => e.Facebook)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("facebook");
-            entity.Property(e => e.Instagram)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("instagram");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("phone");
-            entity.Property(e => e.Shoppee)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("shoppee");
-            entity.Property(e => e.Tiktok)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("tiktok");
-        });
-
-        modelBuilder.Entity<Kind>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Kind__3213E83F7851F8E8");
-
-            entity.ToTable("Kind");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ChickenId).HasColumnName("chicken_id");
-            entity.Property(e => e.Image)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("image");
-            entity.Property(e => e.KindName)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("kindName");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.Status).HasColumnName("status");
-
-            entity.HasOne(d => d.Chicken).WithMany(p => p.Kinds)
-                .HasForeignKey(d => d.ChickenId)
-                .HasConstraintName("FK__Kind__chicken_id__3C69FB99");
-        });
-
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3213E83F820ABC96");
-
-            entity.ToTable("Order");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AdminId).HasColumnName("adminId");
-            entity.Property(e => e.CreateDate)
-                .HasColumnType("datetime")
-                .HasColumnName("createDate");
-            entity.Property(e => e.OrderCode)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("orderCode");
-            entity.Property(e => e.OrderRequirement)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("orderRequirement");
-            entity.Property(e => e.PaymentMethod)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("paymentMethod");
-            entity.Property(e => e.Status)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("status");
-            entity.Property(e => e.TotalPrice)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("totalPrice");
-            entity.Property(e => e.UserId).HasColumnName("userId");
-
-            entity.HasOne(d => d.Admin).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.AdminId)
-                .HasConstraintName("FK__Order__adminId__49C3F6B7");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Order__userId__48CFD27E");
-        });
-
-        modelBuilder.Entity<OrderItem>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__OrderIte__3213E83F89111A43");
-
-            entity.ToTable("OrderItem");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ChickenId).HasColumnName("chicken_id");
-            entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("price");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-            entity.HasOne(d => d.Chicken).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.ChickenId)
-                .HasConstraintName("FK__OrderItem__chick__4D94879B");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__OrderItem__order__4CA06362");
-        });
-
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3213E83FFFDBAAB7");
-
-            entity.ToTable("Role");
-
-            entity.HasIndex(e => e.RoleName, "UQ__Role__783254B121EF7743").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.RoleName)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("role_name");
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__User__3213E83F68A20A7D");
-
-            entity.ToTable("User");
-
-            entity.HasIndex(e => e.IdentityCard, "UQ__User__4943C3B451DEFBF7").IsUnique();
-
-            entity.HasIndex(e => e.Username, "UQ__User__F3DBC572F840E74A").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnName("create_date");
-            entity.Property(e => e.Dob).HasColumnName("dob");
-            entity.Property(e => e.IdentityCard)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("identity_card");
-            entity.Property(e => e.Password)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("password");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(15)
-                .IsUnicode(false)
-                .HasColumnName("phone");
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("status");
-            entity.Property(e => e.Username)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("username");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__User__role_id__4222D4EF");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
+        //Seed data for User
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 1, RoleId = 1, Username = "kaneki", Password = "12345", FullName = "Pham Quoc Dat", Avatar = "https://firebasestorage.googleapis.com/v0/b/fustudy-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", Gender = "Male" ,IdentityCard = "074202000730", Dob = DateTime.Now, Phone = "0855720749", CreateDate = DateTime.Now, Status = true}
+            );
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

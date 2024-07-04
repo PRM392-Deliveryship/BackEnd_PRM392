@@ -57,7 +57,12 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IChickenService, ChickenService>();
+builder.Services.AddScoped<IKindService, KindService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>
@@ -67,14 +72,13 @@ var config = new MapperConfiguration(cfg =>
 builder.Services.AddSingleton<IMapper>(config.CreateMapper());
 
 // Add services to the container.
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 23)); // Replace with your actual MySQL server version
 builder.Services.AddDbContext<GaVietNamContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-                        sqlServerOptionsAction: sqlOptions =>
-                        {
-                            sqlOptions.MigrationsAssembly("GaVietNam_API");
-                        });
-});
+    var connectionString = builder.Configuration.GetConnectionString("MyDB");
+    options.UseMySql(connectionString, serverVersion, options => options.MigrationsAssembly("GaVietNam_API"));
+}
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
