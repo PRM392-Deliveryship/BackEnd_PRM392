@@ -3,6 +3,7 @@ using GaVietNam_Model.AutoMapper;
 using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
 using GaVietNam_Service.Interface;
+using GaVietNam_Service.Interfaces;
 using GaVietNam_Service.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IChickenService, ChickenService>();
 builder.Services.AddScoped<IKindService, KindService>();

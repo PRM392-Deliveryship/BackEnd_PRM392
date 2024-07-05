@@ -49,7 +49,9 @@ namespace GaVietNam_Model.AutoMapper
             CreateMap<User, UserReponse>().ReverseMap();
             #endregion
 
-
+            #region Login
+            //CreateMap<>
+            #endregion
         }
     }
 }
