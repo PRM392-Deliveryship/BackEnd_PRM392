@@ -59,6 +59,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IChickenService, ChickenService>();
 builder.Services.AddScoped<IKindService, KindService>();

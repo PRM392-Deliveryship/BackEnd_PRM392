@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GaVietNam_Model.DTO.Request
+namespace GaVietNam_Model.DTO.Response
 {
-    internal class UserRequest
+    public class UserDTOResponse
     {
     }
 }
