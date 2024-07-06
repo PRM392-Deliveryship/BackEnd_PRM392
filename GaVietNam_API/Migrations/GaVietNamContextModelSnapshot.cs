@@ -445,7 +445,7 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            Avatar = "https://firebasestorage.googleapis.com/v0/b/fustudy-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
+                            Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
                             CreateDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1484),
                             Dob = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1482),
                             FullName = "Pham Quoc Dat",

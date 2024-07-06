@@ -296,7 +296,7 @@ namespace GaVietNam_API.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Avatar", "CreateDate", "Dob", "FullName", "Gender", "IdentityCard", "Password", "Phone", "RoleId", "Status", "Username" },
-                values: new object[] { 1L, "https://firebasestorage.googleapis.com/v0/b/fustudy-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1484), new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1482), "Pham Quoc Dat", "Male", "074202000730", "12345", "0855720749", 1L, true, "kaneki" });
+                values: new object[] { 1L, "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1484), new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1482), "Pham Quoc Dat", "Male", "074202000730", "12345", "0855720749", 1L, true, "kaneki" });
 
             migrationBuilder.InsertData(
                 table: "Orders",

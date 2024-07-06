@@ -57,6 +57,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IChickenService, ChickenService>();
 builder.Services.AddScoped<IKindService, KindService>();

@@ -45,8 +45,9 @@ namespace GaVietNam_Model.AutoMapper
             #endregion
 
             #region User
-            CreateMap<UserRequest, User>().ReverseMap();
-            CreateMap<User, UserReponse>().ReverseMap();
+            CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<UpdateAccountDTORequest, User>().ReverseMap();
+            CreateMap<User, UserDTOResponse>().ReverseMap();
             #endregion
 
 

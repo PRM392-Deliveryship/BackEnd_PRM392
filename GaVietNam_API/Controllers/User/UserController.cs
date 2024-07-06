@@ -1,4 +1,5 @@
 ﻿using CoreApiResponse;
+using GaVietNam_Model.DTO.Request;
 using GaVietNam_Service.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace GaVietNam_API.Controllers.User
             _userService = userService;
         }
 
-        /*[HttpGet("GetLoginUser")]
+        [HttpGet("GetLoginUser")]
         public async Task<IActionResult> GetLoginUser()
         {
             try
@@ -36,7 +37,7 @@ namespace GaVietNam_API.Controllers.User
         }
 
         [HttpPatch("UpdateLoginUser")]
-        public async Task<IActionResult> UpdateLoginUser([FromBody] UpdateAccountDTORequest updateAccountDtoRequest)
+        public async Task<IActionResult> UpdateLoginUser([FromBody] UpdateAccountDTORequest updateAccountDTORequest)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace GaVietNam_API.Controllers.User
                     return CustomResult(ModelState, HttpStatusCode.BadRequest);
                 }
 
-                var user = await _userService.UpdateLoginUser(updateAccountDtoRequest);
+                var user = await _userService.UpdateLoginUser(updateAccountDTORequest);
                 return CustomResult("Update Successful!", user);
             }
             catch (CustomException.InvalidDataException ex)
@@ -79,6 +80,6 @@ namespace GaVietNam_API.Controllers.User
                 return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
             }
 
-        }*/
+        }
     }
 }
