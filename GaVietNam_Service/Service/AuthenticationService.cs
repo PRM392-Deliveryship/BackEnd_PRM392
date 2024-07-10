@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GaVietNam_Model.DTO.Request;
 using GaVietNam_Model.DTO.Response;
+using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
 using GaVietNam_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -27,20 +29,75 @@ namespace GaVietNam_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<(string Token, LoginResponse loginResponse)> AuthorizeUser(LoginRequest loginRequest)
+        public async Task<CreateAccountDTOResponse> Register(RegisterRequest registerRequest)
         {
-
-            Authentication authentication = new(_configuration, _unitOfWork);
-
-            var member = _unitOfWork.AdminRepository
-                .Get(filter: a => a.Username == loginRequest.UserName && a.Status == true).FirstOrDefault();
-            if (member != null && authentication.VerifyPassword(loginRequest.Password, member.Password))
+            IEnumerable<User> checkEmail =
+                await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Email.Equals(registerRequest.Email));
+            IEnumerable<User> checkUsername =
+                await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Username.Equals(registerRequest.Username));
+            if (checkEmail.Count() != 0)
             {
-                string token = authentication.GenerateToken(member);
-                var adminResponse = _mapper.Map<LoginResponse>(member);
-                return (token, adminResponse);
+                throw new InvalidDataException($"Email is exist");
             }
-            return (null, null);
+
+            if (checkUsername.Count() != 0)
+            {
+                throw new InvalidDataException($"Username is exist");
+            }
+
+            if (registerRequest.Password != registerRequest.ConfirmPassword)
+            {
+                throw new CustomException.InvalidDataException("Confirm Password not match!");
+            }
+
+            var userGender = "Order";
+            switch (registerRequest.Gender.Trim().ToLower())
+            {
+                case "male": userGender = "Male"; break;
+                case "female": userGender = "Female"; break;
+            }
+
+            var user = _mapper.Map<User>(registerRequest);
+            user.Gender = userGender;
+            user.RoleId = 3;
+            user.Password = EncryptPassword.Encrypt(registerRequest.Password);
+            user.FullName = "";
+            user.Avatar = "";
+            user.IdentityCard = "";
+            user.Dob = DateTime.Now;
+            user.Phone = "";    
+            user.Status = true;
+            user.CreateDate = DateTime.Now.Date;
+
+            await _unitOfWork.UserRepository.AddAsync(user);
+
+            CreateAccountDTOResponse createAccountDTOResponse = _mapper.Map<CreateAccountDTOResponse>(user);
+            return createAccountDTOResponse;
+
+        }
+
+        public async Task<(string, LoginDTOResponse)> Login(LoginRequest loginRequest)
+        {
+            string hashedPass = EncryptPassword.Encrypt(loginRequest.Password);
+            IEnumerable<User> check = await _unitOfWork.UserRepository.GetByFilterAsync(x =>
+                x.Username.Equals(loginRequest.UserName)
+                && x.Password.Equals(hashedPass)
+            );
+            if (!check.Any())
+            {
+                throw new CustomException.InvalidDataException(HttpStatusCode.BadRequest.ToString(), $"Username or password error");
+            }
+
+            User user = check.First();
+            if (user.Status == false)
+            {
+                throw new CustomException.InvalidDataException(HttpStatusCode.BadRequest.ToString(), $"User is not active");
+            }
+
+            LoginDTOResponse loginDtoResponse = _mapper.Map<LoginDTOResponse>(user);
+            Authentication authentication = new(_configuration, _unitOfWork);
+            string token = await authentication.GenerateJwtToken(user, 15);
+            return (token, loginDtoResponse);
         }
     }
 }

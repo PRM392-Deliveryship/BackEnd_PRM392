@@ -37,6 +37,8 @@ public partial class GaVietNamContext : DbContext
 
     public virtual DbSet<Token> Tokens { get; set; }
 
+    public virtual DbSet<CartItem> CartItems { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -99,7 +101,7 @@ public partial class GaVietNamContext : DbContext
 
         //Seed data for User
         modelBuilder.Entity<User>().HasData(
-            new User { Id = 1, RoleId = 1, Username = "kaneki", Password = "12345", FullName = "Pham Quoc Dat", Email = "phamdat720749pd@gmail.com", Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", Gender = "Male" ,IdentityCard = "074202000730", Dob = DateTime.Now, Phone = "0855720749", CreateDate = DateTime.Now, Status = true}
+            new User { Id = 1, RoleId = 3, Username = "kaneki", Password = "12345", FullName = "Pham Quoc Dat", Email = "phamdat720749pd@gmail.com", Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", Gender = "Male" ,IdentityCard = "074202000730", Dob = DateTime.Now, Phone = "0855720749", CreateDate = DateTime.Now, Status = true}
             );
     }
 }

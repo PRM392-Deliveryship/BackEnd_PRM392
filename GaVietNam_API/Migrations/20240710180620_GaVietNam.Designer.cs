@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaVietNam_API.Migrations
 {
     [DbContext(typeof(GaVietNamContext))]
-    [Migration("20240704141004_GaVietNam")]
+    [Migration("20240710180620_GaVietNam")]
     partial class GaVietNam
     {
         /// <inheritdoc />
@@ -86,6 +86,37 @@ namespace GaVietNam_API.Migrations
                     b.ToTable("Bills");
                 });
 
+            modelBuilder.Entity("GaVietNam_Repository.Entity.CartItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ChickenName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("ChickenPrice")
+                        .HasColumnType("double");
+
+                    b.Property<string>("KindImage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KindName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("GaVietNam_Repository.Entity.Chicken", b =>
                 {
                     b.Property<long>("Id")
@@ -121,8 +152,8 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1386),
-                            ModifiedDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1405),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5865),
+                            ModifiedDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5880),
                             Name = "Gà Tam Hoàng",
                             Price = 1000000.0,
                             Status = true,
@@ -131,8 +162,8 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1408),
-                            ModifiedDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1409),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5883),
                             Name = "Gà Ta",
                             Price = 2000000.0,
                             Status = true,
@@ -307,7 +338,7 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1437),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5908),
                             OrderCode = "ahihi",
                             OrderRequirement = "ahihi",
                             PaymentMethod = "ahihi",
@@ -390,6 +421,37 @@ namespace GaVietNam_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("GaVietNam_Repository.Entity.Token", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Revoked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TokenValue")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Token");
+                });
+
             modelBuilder.Entity("GaVietNam_Repository.Entity.User", b =>
                 {
                     b.Property<long>("Id")
@@ -407,6 +469,10 @@ namespace GaVietNam_API.Migrations
 
                     b.Property<DateTime>("Dob")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -449,14 +515,15 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
-                            CreateDate = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1484),
-                            Dob = new DateTime(2024, 7, 4, 21, 10, 3, 415, DateTimeKind.Local).AddTicks(1482),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5961),
+                            Dob = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5960),
+                            Email = "phamdat720749pd@gmail.com",
                             FullName = "Pham Quoc Dat",
                             Gender = "Male",
                             IdentityCard = "074202000730",
                             Password = "12345",
                             Phone = "0855720749",
-                            RoleId = 1L,
+                            RoleId = 3L,
                             Status = true,
                             Username = "kaneki"
                         });
@@ -531,6 +598,17 @@ namespace GaVietNam_API.Migrations
                     b.Navigation("Chicken");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("GaVietNam_Repository.Entity.Token", b =>
+                {
+                    b.HasOne("GaVietNam_Repository.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GaVietNam_Repository.Entity.User", b =>

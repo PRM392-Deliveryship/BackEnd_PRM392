@@ -10,6 +10,7 @@ namespace GaVietNam_Service.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<(string Token, LoginResponse loginResponse)> AuthorizeUser(LoginRequest loginRequest);
+        Task<CreateAccountDTOResponse> Register(RegisterRequest registerRequest);
+        Task<(string, LoginDTOResponse)> Login(LoginRequest loginRequest);
     }
 }

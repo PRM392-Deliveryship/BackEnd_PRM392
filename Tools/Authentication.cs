@@ -1,13 +1,18 @@
-﻿using GaVietNam_Repository.Entity;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Tools;
+
 public class Authentication
 {
     private readonly IConfiguration _configuration;
@@ -19,42 +24,45 @@ public class Authentication
         _unitOfWork = unitOfWork;
     }
 
-    public string GenerateToken(Admin info)
+    public async Task<string> GenerateJwtToken(User user, float hour)
     {
-        List<Claim> claims = new List<Claim>()
-        {            
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, info.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-        };
-
-        if (info.Id != 0)
+        if (user == null)
         {
-            var role = _unitOfWork.RoleRepository.Get(filter: r => r.Id == info.Id).FirstOrDefault();
-            claims.Add(new Claim("role", role.RoleName));
+            throw new ArgumentNullException(nameof(user), "User cannot be null");
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var jwtKey = _configuration["Jwt:Key"];
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey ?? ""));
+        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+        long roleId = user.RoleId;
+        Role role = await _unitOfWork.RoleRepository.GetByIdAsync(roleId);
+
+
+        // Log role value to console
+        Console.WriteLine($"Role: {role}");
+
+        List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim("Name", user.Username),
+                new Claim(ClaimTypes.Role, role.RoleName),
+                new Claim(ClaimTypes.Email, user.Email),
+
+            };
 
         var token = new JwtSecurityToken(
+            _configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddDays(1),
-            signingCredentials: creds);
+            expires: DateTime.Now.AddHours(hour),
+            signingCredentials: signingCredentials
+        );
 
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-        return jwt;
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public bool VerifyPassword(string providedPassword, string hashedPassword)
-    {
-        return BCrypt.Net.BCrypt.Verify(providedPassword, hashedPassword);
-    }
 
-    public string HashPassword(string password)
-    {
-        return BCrypt.Net.BCrypt.HashPassword(password);
-    }
 
     public static string GetUserIdFromHttpContext(HttpContext httpContext)
     {
@@ -65,18 +73,34 @@ public class Authentication
 
         string? authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("bearer "))
+        if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
         {
             throw new CustomException.InternalServerErrorException(
                 $"Invalid authorization header: {authorizationHeader}");
         }
 
-        string jwtToken = authorizationHeader["bearer ".Length..];
+        string jwtToken = authorizationHeader["Bearer ".Length..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.ReadJwtToken(jwtToken);
-        var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub);
+        var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Sid);
         return idClaim?.Value ??
                throw new CustomException.InternalServerErrorException($"Can not get userId from token");
 
+    }
+    public static string GenerateRandomString(int length)
+    {
+        Random random = new Random();
+        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        StringBuilder result = new StringBuilder(length);
+        for (int i = 0; i < length; i++)
+        {
+            result.Append(chars[random.Next(chars.Length)]);
+        }
+        return result.ToString();
+    }
+    public string HashPassword(string password)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(password);
     }
 }

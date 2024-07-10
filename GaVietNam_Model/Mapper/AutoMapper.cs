@@ -51,7 +51,23 @@ namespace GaVietNam_Model.AutoMapper
             #endregion
 
             #region Login
-            //CreateMap<>
+            CreateMap<User, LoginDTOResponse>().ReverseMap();
+            #endregion
+
+            #region CreateAccount
+            CreateMap<DTO.Request.RegisterRequest, User>().ReverseMap();
+            CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<User, CreateAccountDTOResponse>().ReverseMap();
+            #endregion
+
+            #region Order
+            CreateMap<OrderRequest, Order>().ReverseMap();
+            CreateMap<Order, OrderResponse>().ReverseMap();
+            #endregion
+
+            #region Cart
+            CreateMap<CartRequest, CartItem>().ReverseMap();
+            CreateMap<CartItem, CartResponse>().ReverseMap(); 
             #endregion
         }
     }

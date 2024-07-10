@@ -1,5 +1,6 @@
 ﻿using CoreApiResponse;
 using GaVietNam_Model.DTO.Request;
+using GaVietNam_Model.DTO.Response;
 using GaVietNam_Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,18 +19,47 @@ namespace GaVietNam_API.Controllers.Authentication
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
-            var result = await _authenticationService.AuthorizeUser(loginRequest);
-            if (result.Token != null)
+             try
+             {
+                CreateAccountDTOResponse user = await _authenticationService.Register(registerRequest);
+
+                return CustomResult("Register Success",user, HttpStatusCode.OK);
+
+             }
+             catch (Exception e)
+             {
+                  return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+             }
+            
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginRequest loginRequest)
+        {
+            try
             {
-                return CustomResult("Login successful.", new { result.Token, LoginResponse = result.loginResponse });
+                (string, LoginDTOResponse) tuple = await _authenticationService.Login(loginRequest);
+                if (tuple.Item1 == null)
+                {
+                    return Unauthorized();
+                }
+
+                Dictionary<string, object> result = new()
+                {
+                    { "token", tuple.Item1 },
+                    { "user", tuple.Item2 ?? null }
+                };
+                return CustomResult("Login Success", result, HttpStatusCode.OK);
             }
-            else
+            catch (Exception e)
             {
-                return CustomResult("Invalid email or password.", HttpStatusCode.Unauthorized);
+                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
             }
+
+
         }
     }
 }
