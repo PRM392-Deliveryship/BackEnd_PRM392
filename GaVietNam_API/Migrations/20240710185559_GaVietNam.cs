@@ -279,7 +279,7 @@ namespace GaVietNam_API.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
-                    ChickenId = table.Column<long>(type: "bigint", nullable: false),
+                    KindId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "double", nullable: false)
                 },
@@ -287,9 +287,9 @@ namespace GaVietNam_API.Migrations
                 {
                     table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Chickens_ChickenId",
-                        column: x => x.ChickenId,
-                        principalTable: "Chickens",
+                        name: "FK_OrderItems_Kinds_KindId",
+                        column: x => x.KindId,
+                        principalTable: "Kinds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -306,8 +306,8 @@ namespace GaVietNam_API.Migrations
                 columns: new[] { "Id", "CreateDate", "ModifiedDate", "Name", "Price", "Status", "Stock" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5865), new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5880), "Gà Tam Hoàng", 1000000.0, true, 10 },
-                    { 2L, new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5882), new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5883), "Gà Ta", 2000000.0, true, 10 }
+                    { 1L, new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(8989), new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9003), "Gà Tam Hoàng", 1000000.0, true, 10 },
+                    { 2L, new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9006), new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9007), "Gà Ta", 2000000.0, true, 10 }
                 });
 
             migrationBuilder.InsertData(
@@ -344,16 +344,16 @@ namespace GaVietNam_API.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Avatar", "CreateDate", "Dob", "Email", "FullName", "Gender", "IdentityCard", "Password", "Phone", "RoleId", "Status", "Username" },
-                values: new object[] { 1L, "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5961), new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5960), "phamdat720749pd@gmail.com", "Pham Quoc Dat", "Male", "074202000730", "12345", "0855720749", 3L, true, "kaneki" });
+                values: new object[] { 1L, "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9115), new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9114), "phamdat720749pd@gmail.com", "Pham Quoc Dat", "Male", "074202000730", "12345", "0855720749", 3L, true, "kaneki" });
 
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5908), "ahihi", "ahihi", "ahihi", "Successful", 1000000.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9063), "ahihi", "ahihi", "ahihi", "Successful", 1000000.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "OrderItems",
-                columns: new[] { "Id", "ChickenId", "OrderId", "Price", "Quantity" },
+                columns: new[] { "Id", "KindId", "OrderId", "Price", "Quantity" },
                 values: new object[] { 1L, 1L, 1L, 1000000.0, 1 });
 
             migrationBuilder.CreateIndex(
@@ -372,9 +372,9 @@ namespace GaVietNam_API.Migrations
                 column: "ChickenId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ChickenId",
+                name: "IX_OrderItems_KindId",
                 table: "OrderItems",
-                column: "ChickenId");
+                column: "KindId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
@@ -415,19 +415,19 @@ namespace GaVietNam_API.Migrations
                 name: "Contacts");
 
             migrationBuilder.DropTable(
-                name: "Kinds");
-
-            migrationBuilder.DropTable(
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "Token");
 
             migrationBuilder.DropTable(
-                name: "Chickens");
+                name: "Kinds");
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Chickens");
 
             migrationBuilder.DropTable(
                 name: "Admins");

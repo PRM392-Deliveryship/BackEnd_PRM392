@@ -65,10 +65,21 @@ namespace GaVietNam_Model.AutoMapper
             CreateMap<Order, OrderResponse>().ReverseMap();
             #endregion
 
+            #region OrderItem
+            CreateMap<OrderItem, OrderItemResponse>()
+                .ForMember(dest => dest.ChickenName, opt => opt.MapFrom(src => src.Kind.Chicken.Name))
+                .ForMember(dest => dest.KindName, opt => opt.MapFrom(src => src.Kind.KindName))
+                .ReverseMap();
+            #endregion
+
+            CreateMap<CartItem, OrderItem>().ForMember(dest => dest.Id, opt => opt.Ignore());
+
             #region Cart
             CreateMap<CartRequest, CartItem>().ReverseMap();
             CreateMap<CartItem, CartResponse>().ReverseMap(); 
             #endregion
+
+
         }
     }
 }

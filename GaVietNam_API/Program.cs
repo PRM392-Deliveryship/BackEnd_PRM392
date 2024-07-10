@@ -68,6 +68,7 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>

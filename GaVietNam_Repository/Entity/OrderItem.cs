@@ -10,14 +10,14 @@ public partial class OrderItem
 
     public long OrderId { get; set; }
 
-    public long ChickenId { get; set; }
+    public long KindId { get; set; }
 
     public int Quantity { get; set; }
 
     public double Price { get; set; }
 
-    [ForeignKey("ChickenId")]
-    public virtual Chicken Chicken { get; set; }
+    [ForeignKey("KindId")]
+    public virtual Kind Kind { get; set; }
 
     [ForeignKey("OrderId")]
     public virtual Order Order { get; set; }

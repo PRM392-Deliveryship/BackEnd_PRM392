@@ -149,8 +149,8 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5865),
-                            ModifiedDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5880),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(8989),
+                            ModifiedDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9003),
                             Name = "Gà Tam Hoàng",
                             Price = 1000000.0,
                             Status = true,
@@ -159,8 +159,8 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5882),
-                            ModifiedDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5883),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9006),
+                            ModifiedDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9007),
                             Name = "Gà Ta",
                             Price = 2000000.0,
                             Status = true,
@@ -335,7 +335,7 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5908),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9063),
                             OrderCode = "ahihi",
                             OrderRequirement = "ahihi",
                             PaymentMethod = "ahihi",
@@ -353,7 +353,7 @@ namespace GaVietNam_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("ChickenId")
+                    b.Property<long>("KindId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("OrderId")
@@ -367,7 +367,7 @@ namespace GaVietNam_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChickenId");
+                    b.HasIndex("KindId");
 
                     b.HasIndex("OrderId");
 
@@ -377,7 +377,7 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            ChickenId = 1L,
+                            KindId = 1L,
                             OrderId = 1L,
                             Price = 1000000.0,
                             Quantity = 1
@@ -512,8 +512,8 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
-                            CreateDate = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5961),
-                            Dob = new DateTime(2024, 7, 11, 1, 6, 20, 17, DateTimeKind.Local).AddTicks(5960),
+                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9115),
+                            Dob = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9114),
                             Email = "phamdat720749pd@gmail.com",
                             FullName = "Pham Quoc Dat",
                             Gender = "Male",
@@ -580,19 +580,19 @@ namespace GaVietNam_API.Migrations
 
             modelBuilder.Entity("GaVietNam_Repository.Entity.OrderItem", b =>
                 {
-                    b.HasOne("GaVietNam_Repository.Entity.Chicken", "Chicken")
+                    b.HasOne("GaVietNam_Repository.Entity.Kind", "Kind")
                         .WithMany()
-                        .HasForeignKey("ChickenId")
+                        .HasForeignKey("KindId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GaVietNam_Repository.Entity.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Chicken");
+                    b.Navigation("Kind");
 
                     b.Navigation("Order");
                 });
@@ -617,6 +617,11 @@ namespace GaVietNam_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("GaVietNam_Repository.Entity.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

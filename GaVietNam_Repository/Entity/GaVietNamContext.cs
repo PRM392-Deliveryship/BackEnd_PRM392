@@ -96,7 +96,7 @@ public partial class GaVietNamContext : DbContext
 
         //Seed data for OrderItem
         modelBuilder.Entity<OrderItem>().HasData(
-            new OrderItem { Id = 1, ChickenId = 1, OrderId = 1, Quantity = 1, Price = 1000000 }
+            new OrderItem { Id = 1, KindId = 1, OrderId = 1, Quantity = 1, Price = 1000000 }
             );
 
         //Seed data for User
