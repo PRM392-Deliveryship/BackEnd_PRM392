@@ -12,5 +12,6 @@ namespace GaVietNam_Model.DTO.Response
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public string Avatar { get; set; }
     }
 }

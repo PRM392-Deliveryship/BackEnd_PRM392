@@ -1,6 +1,7 @@
 ﻿using CoreApiResponse;
 using GaVietNam_Model.DTO.Request;
 using GaVietNam_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -61,7 +62,7 @@ namespace GaVietNam_API.Controllers.User
 
 
         [HttpPatch("UpdateLoginUserAvatar")]
-
+        [Authorize]
         public async Task<IActionResult> UpdateLoginUserAvatar([FromForm] ImageRequest imageRequest)
         {
             try

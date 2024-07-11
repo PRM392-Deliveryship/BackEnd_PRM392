@@ -85,8 +85,8 @@ public partial class GaVietNamContext : DbContext
 
         //Seed data for chicken
         modelBuilder.Entity<Chicken>().HasData(
-            new Chicken { Id = 1, Name = "Gà Tam Hoàng", Price = 1000000, Stock = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
-            new Chicken { Id = 2, Name = "Gà Ta", Price = 2000000, Stock = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
+            new Chicken { Id = 1, Name = "Gà Tam Hoàng", Price = 1000000, Avatar = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51", Stock = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true },
+            new Chicken { Id = 2, Name = "Gà Ta", Price = 2000000, Avatar = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51", Stock = 10, CreateDate = DateTime.Now, ModifiedDate = DateTime.Now, Status = true }
             );
 
         //Seed data for Order
