@@ -83,6 +83,35 @@ namespace GaVietNam_API.Migrations
                     b.ToTable("Bills");
                 });
 
+            modelBuilder.Entity("GaVietNam_Repository.Entity.Cart", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("double");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            TotalPrice = 0.0,
+                            UserId = 1L
+                        });
+                });
+
             modelBuilder.Entity("GaVietNam_Repository.Entity.CartItem", b =>
                 {
                     b.Property<long>("Id")
@@ -91,27 +120,31 @@ namespace GaVietNam_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("ChickenName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<long>("CartId")
+                        .HasColumnType("bigint");
 
-                    b.Property<double>("ChickenPrice")
-                        .HasColumnType("double");
-
-                    b.Property<string>("KindImage")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("KindName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<long>("KindId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("KindId");
+
                     b.ToTable("CartItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CartId = 1L,
+                            KindId = 1L,
+                            Quantity = 1
+                        });
                 });
 
             modelBuilder.Entity("GaVietNam_Repository.Entity.Chicken", b =>
@@ -124,6 +157,10 @@ namespace GaVietNam_API.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime(6)");
@@ -149,8 +186,9 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(8989),
-                            ModifiedDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9003),
+                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7572),
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51",
+                            ModifiedDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7582),
                             Name = "Gà Tam Hoàng",
                             Price = 1000000.0,
                             Status = true,
@@ -159,8 +197,9 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9006),
-                            ModifiedDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9007),
+                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7584),
+                            Image = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51",
+                            ModifiedDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7585),
                             Name = "Gà Ta",
                             Price = 2000000.0,
                             Status = true,
@@ -335,7 +374,7 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9063),
+                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7610),
                             OrderCode = "ahihi",
                             OrderRequirement = "ahihi",
                             PaymentMethod = "ahihi",
@@ -512,8 +551,8 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
-                            CreateDate = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9115),
-                            Dob = new DateTime(2024, 7, 11, 1, 55, 58, 568, DateTimeKind.Local).AddTicks(9114),
+                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7703),
+                            Dob = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7702),
                             Email = "phamdat720749pd@gmail.com",
                             FullName = "Pham Quoc Dat",
                             Gender = "Male",
@@ -546,6 +585,36 @@ namespace GaVietNam_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("GaVietNam_Repository.Entity.Cart", b =>
+                {
+                    b.HasOne("GaVietNam_Repository.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GaVietNam_Repository.Entity.CartItem", b =>
+                {
+                    b.HasOne("GaVietNam_Repository.Entity.Cart", "Cart")
+                        .WithMany()
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GaVietNam_Repository.Entity.Kind", "Kind")
+                        .WithMany()
+                        .HasForeignKey("KindId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Kind");
                 });
 
             modelBuilder.Entity("GaVietNam_Repository.Entity.Kind", b =>
@@ -587,7 +656,7 @@ namespace GaVietNam_API.Migrations
                         .IsRequired();
 
                     b.HasOne("GaVietNam_Repository.Entity.Order", "Order")
-                        .WithMany("OrderDetails")
+                        .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -621,7 +690,7 @@ namespace GaVietNam_API.Migrations
 
             modelBuilder.Entity("GaVietNam_Repository.Entity.Order", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }
