@@ -32,13 +32,13 @@ namespace GaVietNam_Service.Service
             _emailService = emailService;
         }
 
-        public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
+        /*public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
         {
 
             Random rand = new Random();
             int randomNumber = rand.Next(10000, 99999);
 
-            var cartItems = _cartService.GetCartItems();
+            var cart = _cartService.GetCart();
 
             var user = new User
             {
@@ -56,7 +56,7 @@ namespace GaVietNam_Service.Service
             order.UserId = user.Id;
             order.OrderRequirement = orderRequest.OrderRequirement;
             order.PaymentMethod = orderRequest.PaymentMethod;
-            /*            order.AdminId = 1;*/
+            *//*            order.AdminId = 1;*//*
 
             while (_unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode).Any())
             {
@@ -68,13 +68,13 @@ namespace GaVietNam_Service.Service
 
 
             order.CreateDate = DateTime.Now;
-            order.TotalPrice = cartItems.TotalPrice;
+            order.TotalPrice = cart.;
             order.Status = "Pending";
 
             _unitOfWork.OrderRepository.Insert(order);
             _unitOfWork.Save();
 
-            foreach (var cartItem in cartItems.Items)
+            foreach (var cartItem in cart.Items)
             {
                 var orderDetail = _mapper.Map<OrderItem>(cartItem);
 
@@ -92,7 +92,7 @@ namespace GaVietNam_Service.Service
             _cartService.ClearCart();
 
             return await Task.FromResult(_mapper.Map<OrderResponse>(order));
-        }
+        }*/
 
         public async Task<bool> UpdateStatusOrderConfirmed(long id)
         {

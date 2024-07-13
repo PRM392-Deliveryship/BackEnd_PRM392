@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace GaVietNam_Model.DTO.Request
 {
-    public class CartRequest
+    public class CartItemRequest
     {
+        public long KindId { get; set; }
+        public int Quantity { get; set; }
     }
 }

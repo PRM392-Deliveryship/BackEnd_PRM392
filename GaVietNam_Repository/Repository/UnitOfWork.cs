@@ -6,6 +6,7 @@ namespace GaVietNam_Repository.Repository
     {
         private GaVietNamContext _context = new GaVietNamContext();
         private IGenericRepository<Admin> _adminRepository;
+        private IGenericRepository<CartItem> _cartItemRepository;
         private IGenericRepository<Bill> _billRepository;
         private IGenericRepository<Chicken> _chickenRepository;
         private IGenericRepository<Contact> _contactRepository;
@@ -14,11 +15,24 @@ namespace GaVietNam_Repository.Repository
         private IGenericRepository<OrderItem> _orderItemRepository;
         private IGenericRepository<Role> _roleRepository;
         private IGenericRepository<User> _userRepository;
+        private IGenericRepository<Cart> _cartRepository;
 
         public UnitOfWork()
         {
         }
 
+        public IGenericRepository<Cart> CartRepository
+        {
+            get
+            {
+
+                if (_cartRepository == null)
+                {
+                    _cartRepository = new GenericRepository<Cart>(_context);
+                }
+                return _cartRepository;
+            }
+        }
         public IGenericRepository<Admin> AdminRepository
         {
             get
@@ -29,6 +43,18 @@ namespace GaVietNam_Repository.Repository
                     _adminRepository = new GenericRepository<Admin>(_context);
                 }
                 return _adminRepository;
+            }
+        }
+        public IGenericRepository<CartItem> CartItemRepository
+        {
+            get
+            {
+
+                if (_cartItemRepository == null)
+                {
+                    _cartItemRepository = new GenericRepository<CartItem>(_context);
+                }
+                return _cartItemRepository;
             }
         }
         public IGenericRepository<Chicken> ChickenRepository

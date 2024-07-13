@@ -1,6 +1,7 @@
 ﻿using CoreApiResponse;
 using GaVietNam_Model.DTO.Request;
 using GaVietNam_Service.Interface;
+using GaVietNam_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -19,69 +20,45 @@ namespace GaVietNam_API.Controllers.Cart
             _cartService = cartService;
         }
 
-        [HttpGet("GetCartItems")]
-        public IActionResult GetCartItems()
-        {
-            var items = _cartService.GetCartItems();
-            return CustomResult("View chicken from cart.", items);
-        }
-
-        [HttpPost("AddChickenToCart")]
-        public IActionResult AddItemToCart([FromBody] CartRequest request)
+        [HttpGet("GetCart")]
+        public async Task<IActionResult> GetCart()
         {
             try
             {
-                var cartItemDTO = _cartService.AddItem(request.Id, request.Quantity);
-                return CustomResult("Chicken added to cart.", cartItemDTO);
+                var cart = await _cartService.GetCart();
+                return CustomResult("Data Load Successfully", cart);
             }
             catch (CustomException.DataNotFoundException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
-            catch (CustomException.InvalidDataException ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
-            }
             catch (Exception ex)
             {
-                return CustomResult("An error occurred while adding chicken to the cart.", HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [HttpDelete("RemoveChickenFromCart/{chickenId}")]
-        public IActionResult RemoveItemFromCart(long chickenId)
-        {
-            _cartService.RemoveItem(chickenId);
-            return CustomResult("Chicken removed from cart.");
-        }
-
-        [HttpPut("UpdateChickenInCart")]
-        public IActionResult UpdateItemQuantityInCart([FromBody] CartRequest request)
-        {
-            try
-            {
-                _cartService.UpdateItemQuantity(request.Id, request.Quantity);
-                return CustomResult("Chicken quantity updated successfully.");
-            }
-            catch (CustomException.DataNotFoundException ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.NotFound);
-            }
-            catch (CustomException.InvalidDataException ex)
-            {
-                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
-            }
-            catch (Exception ex)
-            {
-                return CustomResult("An error occurred while updating the chicken quantity.", HttpStatusCode.InternalServerError);
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
 
         [HttpDelete("ClearCart")]
         public IActionResult ClearCart()
         {
-            _cartService.ClearCart();
-            return CustomResult("Cart cleared.");
+            try
+            {
+                _cartService.ClearCart();
+                return CustomResult("Cart cleared.");
+
+            }
+            catch (CustomException.ForbbidenException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
