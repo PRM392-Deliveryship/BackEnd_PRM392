@@ -21,7 +21,7 @@ namespace GaVietNam_API.Controllers.Order
             _orderService = orderService;
         }
 
-        [HttpPost("CreateOrder")]
+        /*[HttpPost("CreateOrder")]
         public async Task<IActionResult> CreateOrder([FromBody] OrderRequest orderRequest)
         {
             try
@@ -43,7 +43,7 @@ namespace GaVietNam_API.Controllers.Order
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
 
-        }
+        }*/
 
         [HttpPatch("UpdateStatusOrderConfirmed/{id}")]
         [Authorize(Roles = "Admin")]

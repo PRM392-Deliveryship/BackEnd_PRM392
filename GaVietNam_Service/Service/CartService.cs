@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GaVietNam_Model.DTO.Request;
 using GaVietNam_Model.DTO.Response;
 using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
@@ -27,102 +28,50 @@ namespace GaVietNam_Service.Service
             _mapper = mapper;
         }
 
-        public CartResponse GetCartItems()
+        public async Task<CartResponse> GetCart()
         {
-            var cartItems = GetCartItemsFromSession();
-            var cartItemDTOs = cartItems.Select(item => _mapper.Map<CartItem>(item)).ToList();
-            var totalPrice = cartItemDTOs.Sum(item => item.ChickenPrice * item.Quantity);
-            return new CartResponse { Items = cartItemDTOs, TotalPrice = totalPrice };
-        }
-
-        public CartItem AddItem(long id, int quantity)
-        {
-            var chickenKind = _unitOfWork.KindRepository.GetByID(id);
-            if (chickenKind == null)
+            var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(accountId, out long userId))
             {
-                throw new CustomException.DataNotFoundException("Chicken not found.");
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
             }
 
-            if (quantity > chickenKind.Quantity)
+            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId);
+            if (cart == null)
             {
-                throw new CustomException.InvalidDataException("Requested quantity is greater than the available stock.");
+                throw new CustomException.DataNotFoundException("Cart not found");
             }
-            var chicken = _unitOfWork.ChickenRepository.GetByID(chickenKind.ChickenId);
 
-            var cartItems = GetCartItemsFromSession();
-            var existingItem = cartItems.FirstOrDefault(item => item.Id == id);
-            if (existingItem != null)
-            {
-                if (existingItem.Quantity + quantity > chickenKind.Quantity)
-                {
-                    throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
-                }
-                existingItem.Quantity += quantity;
-            }
-            else
-            {
-                cartItems.Add(new CartItem { Id = id, Quantity = quantity, ChickenPrice = chicken.Price, ChickenName = chicken.Name, KindImage = chickenKind.Image, KindName = chickenKind.KindName });
-            }
-            SaveCartItemsToSession(cartItems);
-            return _mapper.Map<CartItem>(existingItem ?? cartItems.Last());
-        }
-
-        public void UpdateItemQuantity(long id, int quantity)
-        {
-            var cartItems = GetCartItemsFromSession();
-            var item = cartItems.FirstOrDefault(i => i.Id == id);
-
-            if (item != null)
-            {
-                var chickenKind = _unitOfWork.KindRepository.GetByID(id);
-                if (chickenKind == null)
-                {
-                    throw new CustomException.DataNotFoundException("Chicken kind not found.");
-                }
-
-                var product = _unitOfWork.ChickenRepository.GetByID(chickenKind.ChickenId);
-                if (product == null)
-                {
-                    throw new CustomException.DataNotFoundException("Chicken not found.");
-                }
-
-                if (quantity > chickenKind.Quantity)
-                {
-                    throw new CustomException.InvalidDataException("Requested quantity exceeds the available stock.");
-                }
-
-                item.Quantity = quantity;
-                SaveCartItemsToSession(cartItems);
-            }
-            else
-            {
-                throw new CustomException.DataNotFoundException("Item not found in cart.");
-            }
-        }
-
-        public void RemoveItem(long id)
-        {
-            throw new NotImplementedException();
+            var cartResponse = _mapper.Map<CartResponse>(cart);
+            return cartResponse;
         }
 
         public void ClearCart()
         {
-            var cartItems = new List<CartItem>();
-            SaveCartItemsToSession(cartItems);
-        }
+            var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(accountId, out long userId))
+            {
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
+            }
 
-        private List<CartItem> GetCartItemsFromSession()
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            var cartItemsJson = session.GetString("CartItems");
-            return cartItemsJson == null ? new List<CartItem>() : JsonConvert.DeserializeObject<List<CartItem>>(cartItemsJson);
-        }
+            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId).FirstOrDefault();
+            if (cart == null)
+            {
+                throw new CustomException.DataNotFoundException("Cart not found for the user.");
+            }
 
-        private void SaveCartItemsToSession(List<CartItem> cartItems)
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            var cartItemsJson = JsonConvert.SerializeObject(cartItems);
-            session.SetString("CartItems", cartItemsJson);
+            var existCartItem = _unitOfWork.CartItemRepository.Get(
+                ci => ci.CartId == cart.Id);
+            if (existCartItem == null)
+            {
+                throw new CustomException.DataNotFoundException("No CartItem in Cart");
+            }
+
+            _unitOfWork.CartItemRepository.Delete(existCartItem);
+            cart.TotalPrice = 0;
+            _unitOfWork.CartRepository.Update(cart);
+            _unitOfWork.Save();
+
         }
     }
 }

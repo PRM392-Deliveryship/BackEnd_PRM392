@@ -5,6 +5,7 @@ namespace GaVietNam_Repository.Repository
     public interface IUnitOfWork
     {
         public IGenericRepository<Admin> AdminRepository { get;  }
+        public IGenericRepository<CartItem> CartItemRepository { get; }
         public IGenericRepository<Bill> BillRepository { get; }
         public IGenericRepository<Contact> ContactRepository { get; }
         public IGenericRepository<Kind> KindRepository { get; }
@@ -13,6 +14,8 @@ namespace GaVietNam_Repository.Repository
         public IGenericRepository<Chicken> ChickenRepository { get; }
         public IGenericRepository<Role> RoleRepository { get; }
         public IGenericRepository<User> UserRepository { get; }
+
+        public IGenericRepository<Cart> CartRepository { get; }
         void Save();
         void Dispose();
     }

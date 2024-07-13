@@ -76,10 +76,13 @@ namespace GaVietNam_Model.AutoMapper
 
             #region Cart
             CreateMap<CartRequest, CartItem>().ReverseMap();
-            CreateMap<CartItem, CartResponse>().ReverseMap(); 
+            CreateMap<CartItem, CartResponse>().ReverseMap();
             #endregion
 
-
+            #region CartItem
+            CreateMap<CartItemRequest, CartItem>().ReverseMap();
+            CreateMap<CartItem, CartItemResponse>().ReverseMap();
+            #endregion
         }
     }
 }
