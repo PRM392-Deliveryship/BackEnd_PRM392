@@ -71,6 +71,13 @@ namespace GaVietNam_Service.Service
 
             await _unitOfWork.UserRepository.AddAsync(user);
 
+            var cart = new Cart
+            {
+                UserId = user.Id,
+                TotalPrice = 0
+            };
+
+            await _unitOfWork.CartRepository.AddAsync(cart);
             CreateAccountDTOResponse createAccountDTOResponse = _mapper.Map<CreateAccountDTOResponse>(user);
             return createAccountDTOResponse;
 
