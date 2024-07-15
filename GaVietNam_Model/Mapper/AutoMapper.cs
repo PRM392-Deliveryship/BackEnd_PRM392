@@ -41,7 +41,7 @@ namespace GaVietNam_Model.AutoMapper
 
             #region Role
             CreateMap<RoleRequest, Role>().ReverseMap();
-            CreateMap<Role,  RoleResponse>().ReverseMap();
+            CreateMap<Role, RoleResponse>().ReverseMap();
             #endregion
 
             #region User
@@ -85,6 +85,7 @@ namespace GaVietNam_Model.AutoMapper
                 .ReverseMap();
             CreateMap<CartItem, CartItemResponse>()
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Kind.Chicken.Price))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Kind.Image))
                 .ReverseMap();
             #endregion
         }

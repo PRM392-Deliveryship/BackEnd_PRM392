@@ -13,6 +13,8 @@ namespace GaVietNam_Model.DTO.Response
         public long CartId { get; set; }
         
         public long KindId { get; set; }
+        
+        public string Image { get; set; }
 
         public int Quantity { get; set; }
         
