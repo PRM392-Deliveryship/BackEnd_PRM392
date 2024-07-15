@@ -35,7 +35,7 @@ namespace GaVietNam_Service.Service
                 throw new CustomException.ForbbidenException("User ID claim invalid.");
             }
 
-            var kind = _unitOfWork.KindRepository.GetByID(cartItemRequest.KindId);
+            var kind = _unitOfWork.KindRepository.Get(k => k.Id == cartItemRequest.KindId && k.Status == true).FirstOrDefault();
             if (kind == null)
             {
                 throw new CustomException.DataNotFoundException("Kind not found.");
@@ -57,18 +57,21 @@ namespace GaVietNam_Service.Service
                 _unitOfWork.Save();
             }
 
+            var chicken = _unitOfWork.ChickenRepository.GetByID(kind.ChickenId);
+
             var cartItem = _unitOfWork.CartItemRepository.Get(
                     c => c.CartId == cart.Id &&
                     c.KindId == kind.Id,
                     includeProperties: "Kind").FirstOrDefault();
             if (cartItem != null)
             {   
-                if (cartItemRequest.Quantity > kind.Quantity)
-                {
-                    throw new CustomException.InvalidDataException("Kind Quantity does not have enough for your request");
-                }
+                kind.Quantity -= cartItemRequest.Quantity;
                 cartItem.Quantity += cartItemRequest.Quantity;
-                _unitOfWork.Save();
+                cart.TotalPrice = cartItem.Quantity * chicken.Price;
+
+                _unitOfWork.KindRepository.Update(kind);
+                await _unitOfWork.CartItemRepository.AddAsync(cartItem);
+                _unitOfWork.CartRepository.Update(cart);
             }
             else
             {
@@ -80,9 +83,13 @@ namespace GaVietNam_Service.Service
                     
                 };
                 _unitOfWork.CartItemRepository.Insert(cartItem);
-                _unitOfWork.Save();
+
+                kind.Quantity -= cartItemRequest.Quantity; 
+                _unitOfWork.KindRepository.Update(kind);
+                cart.TotalPrice += cartItemRequest.Quantity * chicken.Price;
+                _unitOfWork.CartRepository.Update(cart);
             }
-            var chicken = _unitOfWork.ChickenRepository.GetByID(kind.ChickenId);
+            _unitOfWork.Save();
 
             var cartItemResponse = _mapper.Map<CartItemResponse>(cartItem);
             cartItemResponse.Price = cartItem.Quantity*chicken.Price;
@@ -102,12 +109,17 @@ namespace GaVietNam_Service.Service
                 }
 
                 _unitOfWork.CartItemRepository.Delete(cartItem);
+
                 var kind = _unitOfWork.KindRepository.GetByID(cartItem.KindId);
+                kind.Quantity += cartItem.Quantity;
+                _unitOfWork.KindRepository.Update(kind);
+
                 var chicken = _unitOfWork.ChickenRepository.GetByID(kind.ChickenId);
 
                 var cart = _unitOfWork.CartRepository.GetByID(cartItem.CartId);
                 cart.TotalPrice -= cartItem.Quantity * chicken.Price;
                 _unitOfWork.CartRepository.Update(cart);
+
                 _unitOfWork.Save();
 
                 return true;
@@ -126,7 +138,7 @@ namespace GaVietNam_Service.Service
                 throw new CustomException.ForbbidenException("User ID claim invalid.");
             }
 
-            var kind = _unitOfWork.KindRepository.GetByID(id);
+            var kind = _unitOfWork.KindRepository.Get(k => k.Id == id && k.Status == true, includeProperties: "Chicken").FirstOrDefault();
             if (kind == null)
             {
                 throw new CustomException.DataNotFoundException("Kind not found.");
@@ -146,10 +158,15 @@ namespace GaVietNam_Service.Service
                 throw new CustomException.DataNotFoundException("CartItem with Kind not found");
             }
             cartItem.Quantity--;
+            kind.Quantity++;
+
+            cart.TotalPrice = cartItem.Quantity * kind.Chicken.Price;
 
             await _unitOfWork.CartItemRepository.SaveChangesAsync();
+            _unitOfWork.Save();
 
             var cartItemResponse = _mapper.Map<CartItemResponse>(cartItem);
+            cartItemResponse.Price = cartItemResponse.Quantity * kind.Chicken.Price;
             return cartItemResponse;
         }
     }
