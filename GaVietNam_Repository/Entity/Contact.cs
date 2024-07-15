@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GaVietNam_Repository.Entity;
 
-public partial class Contact
+public class Contact
 {
     public long Id { get; set; }
 

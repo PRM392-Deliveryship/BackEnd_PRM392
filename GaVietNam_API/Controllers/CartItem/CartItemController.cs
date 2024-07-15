@@ -51,7 +51,7 @@ namespace GaVietNam_API.Controllers.CartItem
             }
         }
 
-        [HttpPatch("RemoveItem{id}")]
+        [HttpPatch("RemoveItem/{id}")]
         [Authorize]
         public async Task<IActionResult> RemoveItem(long id)
         {
@@ -79,7 +79,7 @@ namespace GaVietNam_API.Controllers.CartItem
             }
         }
 
-        [HttpDelete("DeleteItemFromCartItem{id}")]
+        [HttpDelete("DeleteItemFromCartItem/{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteKindFromCartItem(long id)
         {

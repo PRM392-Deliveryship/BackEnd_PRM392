@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GaVietNam_Repository.Entity;
 
-public partial class Kind
+public class Kind
 {
     public long Id { get; set; }
 

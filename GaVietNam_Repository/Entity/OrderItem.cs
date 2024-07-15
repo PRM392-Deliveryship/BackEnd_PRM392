@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GaVietNam_Repository.Entity;
 
-public partial class OrderItem
+public class OrderItem
 {
     public long Id { get; set; }
 

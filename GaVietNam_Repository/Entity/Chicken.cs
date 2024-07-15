@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GaVietNam_Repository.Entity;
 
-public partial class Chicken
+public class Chicken
 {
     public long Id { get; set; }
 

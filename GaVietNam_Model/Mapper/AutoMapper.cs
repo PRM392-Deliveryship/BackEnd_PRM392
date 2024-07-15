@@ -80,7 +80,9 @@ namespace GaVietNam_Model.AutoMapper
             #endregion
 
             #region CartItem
-            CreateMap<CartItemRequest, CartItem>().ReverseMap();
+            CreateMap<CartItem, CartItemRequest>()
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Kind.Quantity))
+                .ReverseMap();
             CreateMap<CartItem, CartItemResponse>().ReverseMap();
             #endregion
         }

@@ -32,31 +32,33 @@ namespace GaVietNam_Service.Service
             _emailService = emailService;
         }
 
-        /*public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
+        public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
         {
+            var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(accountId, out long userId))
+            {
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
+            }
 
             Random rand = new Random();
             int randomNumber = rand.Next(10000, 99999);
 
-            var cart = _cartService.GetCart();
+            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId).FirstOrDefault();
 
-            var user = new User
+            if (cart == null)
             {
-                Username = orderRequest.UserName,
-                Email = orderRequest.Email,
-                Phone = orderRequest.Phone,
-            };
-            _unitOfWork.UserRepository.Insert(user);
+                throw new CustomException.DataNotFoundException("Cart not found.");
+            }
+
             _unitOfWork.Save();
 
             var order = _mapper.Map<Order>(orderRequest);
 
             var checkOrderCode = _unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode);
 
-            order.UserId = user.Id;
             order.OrderRequirement = orderRequest.OrderRequirement;
             order.PaymentMethod = orderRequest.PaymentMethod;
-            *//*            order.AdminId = 1;*//*
+            order.AdminId = 1;
 
             while (_unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode).Any())
             {
@@ -66,33 +68,39 @@ namespace GaVietNam_Service.Service
 
             order.OrderCode = "ORD" + randomNumber.ToString("D5");
 
-
             order.CreateDate = DateTime.Now;
-            order.TotalPrice = cart.;
+            order.TotalPrice = cart.TotalPrice;
             order.Status = "Pending";
 
             _unitOfWork.OrderRepository.Insert(order);
             _unitOfWork.Save();
 
-            foreach (var cartItem in cart.Items)
+            var cartItems = _unitOfWork.CartItemRepository.Get(ci => ci.CartId == cart.Id,
+                    includeProperties: "Kind,Kind.Chicken,Chicken").ToList();
+
+            foreach (var cartItem in cartItems)
             {
                 var orderDetail = _mapper.Map<OrderItem>(cartItem);
 
                 orderDetail.OrderId = order.Id;
-
-                orderDetail.Price = cartItem.ChickenPrice;
-
+                orderDetail.Price = cartItem.Kind.Chicken.Price;
                 orderDetail.Quantity = cartItem.Quantity;
-
-                orderDetail.KindId = cartItem.Id;
+                orderDetail.KindId = cartItem.KindId;
 
                 _unitOfWork.OrderItemRepository.Insert(orderDetail);
             }
 
-            _cartService.ClearCart();
+            _unitOfWork.Save();
+            var orderItem = _unitOfWork.OrderItemRepository.Get(oi => oi.OrderId == order.Id).FirstOrDefault();
+
+            var orderCartItem = _unitOfWork.CartItemRepository.Get(
+                ci => ci.CartId == cart.Id && ci.KindId == orderItem.KindId).ToList();
+
+            _unitOfWork.CartItemRepository.Delete(orderCartItem);
 
             return await Task.FromResult(_mapper.Map<OrderResponse>(order));
-        }*/
+        }
+
 
         public async Task<bool> UpdateStatusOrderConfirmed(long id)
         {

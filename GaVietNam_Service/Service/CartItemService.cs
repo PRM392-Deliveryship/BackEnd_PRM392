@@ -49,10 +49,6 @@ namespace GaVietNam_Service.Service
             var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId).FirstOrDefault();
             if (cart == null)
             {
-                throw new CustomException.DataNotFoundException("Cart not found for the user.");
-            }
-            else
-            {
                 cart = new Cart
                 {
                     UserId = userId
@@ -64,10 +60,15 @@ namespace GaVietNam_Service.Service
             var cartItem = _unitOfWork.CartItemRepository.Get(
                     c => c.CartId == cart.Id &&
                     c.KindId == kind.Id,
-                    includeProperties: "Kind,Kind.Chicken,Chicken").FirstOrDefault();
+                    includeProperties: "Kind").FirstOrDefault();
             if (cartItem != null)
-            {
+            {   
+                if (cartItemRequest.Quantity > kind.Quantity)
+                {
+                    throw new CustomException.InvalidDataException("Kind Quantity does not have enough for your request");
+                }
                 cartItem.Quantity += cartItemRequest.Quantity;
+                _unitOfWork.Save();
             }
             else
             {
@@ -81,9 +82,10 @@ namespace GaVietNam_Service.Service
                 _unitOfWork.CartItemRepository.Insert(cartItem);
                 _unitOfWork.Save();
             }
+            var chicken = _unitOfWork.ChickenRepository.GetByID(kind.ChickenId);
 
             var cartItemResponse = _mapper.Map<CartItemResponse>(cartItem);
-            cartItemResponse.Price = cartItem.Quantity*cartItem.Kind.Chicken.Price;
+            cartItemResponse.Price = cartItem.Quantity*chicken.Price;
             return cartItemResponse;
         }
 

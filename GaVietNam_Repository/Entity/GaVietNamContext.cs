@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace GaVietNam_Repository.Entity;
 
-public partial class GaVietNamContext : DbContext
+public class GaVietNamContext : DbContext
 {
     public GaVietNamContext()
     {
