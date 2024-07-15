@@ -4,6 +4,7 @@ using GaVietNam_Model.DTO.Response;
 using GaVietNam_Repository.Entity;
 using GaVietNam_Service.Interface;
 using GaVietNam_Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -23,6 +24,7 @@ namespace GaVietNam_API.Controllers.CartItem
         }
 
         [HttpPatch("AddItem")]
+        [Authorize]
         public async Task<IActionResult> AddItem(CartItemRequest cartItemRequest)
         {
             try
@@ -49,7 +51,8 @@ namespace GaVietNam_API.Controllers.CartItem
             }
         }
 
-        [HttpPatch("RemoveItem")]
+        [HttpPatch("RemoveItem{id}")]
+        [Authorize]
         public async Task<IActionResult> RemoveItem(long id)
         {
             try
@@ -77,6 +80,7 @@ namespace GaVietNam_API.Controllers.CartItem
         }
 
         [HttpDelete("DeleteItemFromCartItem{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteKindFromCartItem(long id)
         {
             try

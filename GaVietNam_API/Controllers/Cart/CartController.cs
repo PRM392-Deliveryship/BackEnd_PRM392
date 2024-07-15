@@ -2,6 +2,7 @@
 using GaVietNam_Model.DTO.Request;
 using GaVietNam_Service.Interface;
 using GaVietNam_Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -21,6 +22,7 @@ namespace GaVietNam_API.Controllers.Cart
         }
 
         [HttpGet("GetCart")]
+        [Authorize]
         public async Task<IActionResult> GetCart()
         {
             try
@@ -39,6 +41,7 @@ namespace GaVietNam_API.Controllers.Cart
         }
 
         [HttpDelete("ClearCart")]
+        [Authorize]
         public IActionResult ClearCart()
         {
             try
