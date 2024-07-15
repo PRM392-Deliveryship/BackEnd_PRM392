@@ -148,7 +148,6 @@ namespace GaVietNam_Service.Service
             cartItem.Quantity--;
 
             await _unitOfWork.CartItemRepository.SaveChangesAsync();
-            _unitOfWork.Save();
 
             var cartItemResponse = _mapper.Map<CartItemResponse>(cartItem);
             return cartItemResponse;
