@@ -11,7 +11,7 @@ namespace GaVietNam_Service.Interface
 {
     public interface ICartService
     {
-        Task<CartResponse> GetCart();
+        Task<List<CartResponse>> GetCart();
 
         void ClearCart();
     }

@@ -28,7 +28,7 @@ namespace GaVietNam_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<CartResponse> GetCart()
+        public async Task<List<CartResponse>> GetCart()
         {
             var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
             if (!long.TryParse(accountId, out long userId))
@@ -36,13 +36,13 @@ namespace GaVietNam_Service.Service
                 throw new CustomException.ForbbidenException("User ID claim invalid.");
             }
 
-            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId);
+            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId, includeProperties: "User");
             if (cart == null)
             {
                 throw new CustomException.DataNotFoundException("Cart not found");
             }
 
-            var cartResponse = _mapper.Map<CartResponse>(cart);
+            var cartResponse = _mapper.Map<List<CartResponse>>(cart);
             return cartResponse;
         }
 
