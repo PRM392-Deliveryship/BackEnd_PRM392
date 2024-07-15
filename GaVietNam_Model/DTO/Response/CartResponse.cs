@@ -12,6 +12,7 @@ namespace GaVietNam_Model.DTO.Response
         public long Id { get; set; }
         public long UserId { get; set; }
         public double TotalPrice { get; set; }
+        public List<CartItemResponse> CartItems { get; set;}
     }
 
 }

@@ -17,5 +17,7 @@ namespace GaVietNam_Repository.Entity
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
+        public List<CartItem> CartItems { get; set;}
     }
 }

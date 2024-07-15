@@ -36,7 +36,7 @@ namespace GaVietNam_Service.Service
                 throw new CustomException.ForbbidenException("User ID claim invalid.");
             }
 
-            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId, includeProperties: "User");
+            var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId, includeProperties: "User,CartItems").FirstOrDefault();
             if (cart == null)
             {
                 throw new CustomException.DataNotFoundException("Cart not found");
