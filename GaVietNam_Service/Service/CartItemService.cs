@@ -70,7 +70,7 @@ namespace GaVietNam_Service.Service
                 cart.TotalPrice = cartItem.Quantity * chicken.Price;
 
                 _unitOfWork.KindRepository.Update(kind);
-                await _unitOfWork.CartItemRepository.AddAsync(cartItem);
+                _unitOfWork.CartItemRepository.Update(cartItem);
                 _unitOfWork.CartRepository.Update(cart);
             }
             else
