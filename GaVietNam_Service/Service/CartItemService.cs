@@ -95,16 +95,18 @@ namespace GaVietNam_Service.Service
             {
                 var cartItem = _unitOfWork.CartItemRepository.Get(
                     ci => ci.Id == id,
-                    includeProperties: "Kind,Kind.Chicken,Chicken").FirstOrDefault();
+                    includeProperties: "Kind").FirstOrDefault();
                 if (cartItem == null)
                 {
                     throw new CustomException.DataNotFoundException("CartItem not found.");
                 }
 
                 _unitOfWork.CartItemRepository.Delete(cartItem);
+                var kind = _unitOfWork.KindRepository.GetByID(cartItem.KindId);
+                var chicken = _unitOfWork.ChickenRepository.GetByID(kind.ChickenId);
 
                 var cart = _unitOfWork.CartRepository.GetByID(cartItem.CartId);
-                cart.TotalPrice -= cartItem.Quantity * cartItem.Kind.Chicken.Price;
+                cart.TotalPrice -= cartItem.Quantity * chicken.Price;
                 _unitOfWork.CartRepository.Update(cart);
                 _unitOfWork.Save();
 
@@ -145,7 +147,7 @@ namespace GaVietNam_Service.Service
             }
             cartItem.Quantity--;
 
-            _unitOfWork.CartItemRepository.SaveChangesAsync();
+            await _unitOfWork.CartItemRepository.SaveChangesAsync();
             _unitOfWork.Save();
 
             var cartItemResponse = _mapper.Map<CartItemResponse>(cartItem);
