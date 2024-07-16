@@ -2,6 +2,7 @@
 using GaVietNam_Model.DTO.Request;
 using GaVietNam_Repository.Entity;
 using GaVietNam_Service.Interface;
+using GaVietNam_Service.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,25 @@ namespace GaVietNam_API.Controllers.Order
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+        }
+
+        [HttpGet("GetOrderUser")]
+        [Authorize]
+        public async Task<IActionResult> GetOrderUser([FromQuery] QueryObject queryObject)
+        {
+            try
+            {
+                var roles = await _orderService.GetOrderUser(queryObject);
+                return CustomResult("Data Load Successfully", roles);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost("CreateOrder")]

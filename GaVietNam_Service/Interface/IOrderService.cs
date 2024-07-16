@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace GaVietNam_Service.Interface
 {
     public interface IOrderService
     {
+        Task<List<OrderResponse>> GetOrderUser(QueryObject queryObject);
+
         Task<OrderResponse> CreateOrder(OrderRequest orderRequest);
 
         Task<bool> UpdateStatusOrderConfirmed(long id);

@@ -32,6 +32,26 @@ namespace GaVietNam_Service.Service
             _emailService = emailService;
         }
 
+        public async Task<List<OrderResponse>> GetOrderUser(QueryObject queryObject)
+        {
+            var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(accountId, out long userId))
+            {
+                throw new CustomException.ForbbidenException("User ID claim invalid.");
+            }
+
+            var orders = _unitOfWork.OrderRepository.Get(o => o.UserId == userId)
+                .ToList();
+            if (!orders.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Kind in Database");
+            }
+
+            var orderResponses = _mapper.Map<List<OrderResponse>>(orders);
+
+            return orderResponses;
+        }
+
         public async Task<OrderResponse> CreateOrder(OrderRequest orderRequest)
         {
             var accountId = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
