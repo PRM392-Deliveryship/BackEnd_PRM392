@@ -67,7 +67,7 @@ namespace GaVietNam_Service.Service
             {   
                 kind.Quantity -= cartItemRequest.Quantity;
                 cartItem.Quantity += cartItemRequest.Quantity;
-                cart.TotalPrice = cartItem.Quantity * chicken.Price;
+                cart.TotalPrice += cartItem.Quantity * chicken.Price;
 
                 _unitOfWork.KindRepository.Update(kind);
                 _unitOfWork.CartItemRepository.Update(cartItem);

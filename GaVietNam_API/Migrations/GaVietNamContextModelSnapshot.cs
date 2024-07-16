@@ -186,9 +186,9 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7572),
+                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5606),
                             Image = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51",
-                            ModifiedDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7582),
+                            ModifiedDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5628),
                             Name = "Gà Tam Hoàng",
                             Price = 1000000.0,
                             Status = true,
@@ -197,9 +197,9 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7584),
+                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5630),
                             Image = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51",
-                            ModifiedDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7585),
+                            ModifiedDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5630),
                             Name = "Gà Ta",
                             Price = 2000000.0,
                             Status = true,
@@ -374,7 +374,7 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7610),
+                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5659),
                             OrderCode = "ahihi",
                             OrderRequirement = "ahihi",
                             PaymentMethod = "ahihi",
@@ -551,8 +551,8 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
-                            CreateDate = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7703),
-                            Dob = new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7702),
+                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5720),
+                            Dob = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5719),
                             Email = "phamdat720749pd@gmail.com",
                             FullName = "Pham Quoc Dat",
                             Gender = "Male",
@@ -601,7 +601,7 @@ namespace GaVietNam_API.Migrations
             modelBuilder.Entity("GaVietNam_Repository.Entity.CartItem", b =>
                 {
                     b.HasOne("GaVietNam_Repository.Entity.Cart", "Cart")
-                        .WithMany()
+                        .WithMany("CartItems")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -686,6 +686,11 @@ namespace GaVietNam_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("GaVietNam_Repository.Entity.Cart", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("GaVietNam_Repository.Entity.Order", b =>

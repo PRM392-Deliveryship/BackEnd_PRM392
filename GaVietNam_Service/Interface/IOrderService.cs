@@ -10,7 +10,7 @@ namespace GaVietNam_Service.Interface
 {
     public interface IOrderService
     {
-        //Task<OrderResponse> CreateOrder(OrderRequest orderRequest);
+        Task<OrderResponse> CreateOrder(OrderRequest orderRequest);
 
         Task<bool> UpdateStatusOrderConfirmed(long id);
 

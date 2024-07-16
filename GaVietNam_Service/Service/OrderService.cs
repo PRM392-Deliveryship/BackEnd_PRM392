@@ -44,7 +44,6 @@ namespace GaVietNam_Service.Service
             int randomNumber = rand.Next(10000, 99999);
 
             var cart = _unitOfWork.CartRepository.Get(c => c.UserId == userId).FirstOrDefault();
-
             if (cart == null)
             {
                 throw new CustomException.DataNotFoundException("Cart not found.");
@@ -53,20 +52,24 @@ namespace GaVietNam_Service.Service
             _unitOfWork.Save();
 
             var order = _mapper.Map<Order>(orderRequest);
-
-            var checkOrderCode = _unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode);
-
+            order.UserId = userId;
             order.OrderRequirement = orderRequest.OrderRequirement;
             order.PaymentMethod = orderRequest.PaymentMethod;
             order.AdminId = 1;
 
-            while (_unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode).Any())
+            var existingOrderCode = _unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode);
+            if (existingOrderCode.Any())
             {
-                randomNumber = new Random().Next(10000, 99999);
+                do
+                {
+                    randomNumber = rand.Next(10000, 99999);
+                    order.OrderCode = "ORD" + randomNumber.ToString("D5");
+                } while (_unitOfWork.OrderRepository.Get(filter: cod => cod.OrderCode == order.OrderCode).Any());
+            }
+            else
+            {
                 order.OrderCode = "ORD" + randomNumber.ToString("D5");
             }
-
-            order.OrderCode = "ORD" + randomNumber.ToString("D5");
 
             order.CreateDate = DateTime.Now;
             order.TotalPrice = cart.TotalPrice;
@@ -75,31 +78,37 @@ namespace GaVietNam_Service.Service
             _unitOfWork.OrderRepository.Insert(order);
             _unitOfWork.Save();
 
-            var cartItems = _unitOfWork.CartItemRepository.Get(ci => ci.CartId == cart.Id,
-                    includeProperties: "Kind,Kind.Chicken,Chicken").ToList();
-
+            var cartItems = _unitOfWork.CartItemRepository.Get(ci => ci.CartId == cart.Id, includeProperties: "Kind,Kind.Chicken").ToList();
             foreach (var cartItem in cartItems)
             {
-                var orderDetail = _mapper.Map<OrderItem>(cartItem);
+                var orderItem = _mapper.Map<OrderItem>(cartItem);
+                orderItem.OrderId = order.Id;
+                orderItem.Price = cartItem.Kind.Chicken.Price;
+                orderItem.Quantity = cartItem.Quantity;
+                orderItem.KindId = cartItem.KindId;
+                orderItem.Quantity = cartItem.Quantity;
+                orderItem.Price = cartItem.Quantity * cartItem.Kind.Chicken.Price;
 
-                orderDetail.OrderId = order.Id;
-                orderDetail.Price = cartItem.Kind.Chicken.Price;
-                orderDetail.Quantity = cartItem.Quantity;
-                orderDetail.KindId = cartItem.KindId;
-
-                _unitOfWork.OrderItemRepository.Insert(orderDetail);
+                _unitOfWork.OrderItemRepository.Insert(orderItem);
             }
+            _unitOfWork.Save();
+
+            var orderItems = _unitOfWork.OrderItemRepository.Get(oi => oi.OrderId == order.Id).ToList();
+            foreach (var orderItem in orderItems)
+            {
+                var orderCartItems = _unitOfWork.CartItemRepository.Get(ci => ci.CartId == cart.Id && ci.KindId == orderItem.KindId).ToList();
+                foreach (var orderCartItem in orderCartItems)
+                {
+                    _unitOfWork.CartItemRepository.Delete(orderCartItem.Id);
+                }
+            }
+            cart.TotalPrice = 0;
 
             _unitOfWork.Save();
-            var orderItem = _unitOfWork.OrderItemRepository.Get(oi => oi.OrderId == order.Id).FirstOrDefault();
-
-            var orderCartItem = _unitOfWork.CartItemRepository.Get(
-                ci => ci.CartId == cart.Id && ci.KindId == orderItem.KindId).ToList();
-
-            _unitOfWork.CartItemRepository.Delete(orderCartItem);
 
             return await Task.FromResult(_mapper.Map<OrderResponse>(order));
         }
+
 
 
         public async Task<bool> UpdateStatusOrderConfirmed(long id)

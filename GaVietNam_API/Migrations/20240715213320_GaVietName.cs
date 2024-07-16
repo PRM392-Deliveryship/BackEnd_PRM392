@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GaVietNam_API.Migrations
 {
     /// <inheritdoc />
-    public partial class Kaneki : Migration
+    public partial class GaVietName : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -336,8 +336,8 @@ namespace GaVietNam_API.Migrations
                 columns: new[] { "Id", "CreateDate", "Image", "ModifiedDate", "Name", "Price", "Status", "Stock" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7572), "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51", new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7582), "Gà Tam Hoàng", 1000000.0, true, 10 },
-                    { 2L, new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7584), "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51", new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7585), "Gà Ta", 2000000.0, true, 10 }
+                    { 1L, new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5606), "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51", new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5628), "Gà Tam Hoàng", 1000000.0, true, 10 },
+                    { 2L, new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5630), "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51", new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5630), "Gà Ta", 2000000.0, true, 10 }
                 });
 
             migrationBuilder.InsertData(
@@ -374,7 +374,7 @@ namespace GaVietNam_API.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Avatar", "CreateDate", "Dob", "Email", "FullName", "Gender", "IdentityCard", "Password", "Phone", "RoleId", "Status", "Username" },
-                values: new object[] { 1L, "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7703), new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7702), "phamdat720749pd@gmail.com", "Pham Quoc Dat", "Male", "074202000730", "12345", "0855720749", 3L, true, "kaneki" });
+                values: new object[] { 1L, "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807", new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5720), new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5719), "phamdat720749pd@gmail.com", "Pham Quoc Dat", "Male", "074202000730", "12345", "0855720749", 3L, true, "kaneki" });
 
             migrationBuilder.InsertData(
                 table: "Carts",
@@ -384,7 +384,7 @@ namespace GaVietNam_API.Migrations
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "AdminId", "CreateDate", "OrderCode", "OrderRequirement", "PaymentMethod", "Status", "TotalPrice", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 7, 14, 5, 11, 34, 68, DateTimeKind.Local).AddTicks(7610), "ahihi", "ahihi", "ahihi", "Successful", 1000000.0, 1L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5659), "ahihi", "ahihi", "ahihi", "Successful", 1000000.0, 1L });
 
             migrationBuilder.InsertData(
                 table: "CartItems",
