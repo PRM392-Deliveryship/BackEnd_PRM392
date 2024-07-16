@@ -23,6 +23,26 @@ public class Authentication
         _configuration = configuration;
         _unitOfWork = unitOfWork;
     }
+    public string GenerateToken(Admin info)
+    {
+        List<Claim> claims = new List<Claim>()
+        {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("Id", info.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.Now.AddDays(1),
+            signingCredentials: creds);
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+        return jwt;
+    }
 
     public async Task<string> GenerateJwtToken(User user, float hour)
     {

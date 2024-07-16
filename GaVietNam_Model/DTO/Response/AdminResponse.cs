@@ -11,12 +11,9 @@ namespace GaVietNam_Model.DTO.Response
     {
         public long Id { get; set; }
 
-        public long RoleId { get; set; }
-
         public string UserName { get; set; }
 
         public bool Status { get; set; }
 
-        public Role Role { get; set; }
     }
 }

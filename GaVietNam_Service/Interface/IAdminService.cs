@@ -16,6 +16,7 @@ namespace GaVietNam_Service.Interface
         IEnumerable<AdminResponse> GetAllAdminByStatusFalse();
 
         Task<AdminResponse> CreateAdmin(AdminRequest adminRequest);
+        Task<(string, LoginResponse)> LoginAdmin(LoginRequest loginRequest);
         Task<AdminResponse> UpdateAdmin(long id, AdminRequest adminRequest);
         Task<bool> DeleteAdmin(long adminId);
         Task<AdminResponse> GetAdminById(long id);

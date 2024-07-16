@@ -18,9 +18,9 @@ namespace GaVietNam_Model.AutoMapper
 
             #region Admin
             CreateMap<AdminRequest, Admin>().ReverseMap();
-            CreateMap<Admin, AdminResponse>()
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
+            CreateMap<Admin, AdminResponse>().ReverseMap();
             CreateMap<Admin, LoginResponse>();
+            CreateMap<Admin, LoginDTOResponse>();
             #endregion
 
             #region Chicken

@@ -5,10 +5,12 @@ using GaVietNam_Repository.Entity;
 using GaVietNam_Repository.Repository;
 using GaVietNam_Service.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -33,7 +35,7 @@ namespace GaVietNam_Service.Service
         public IEnumerable<AdminResponse> GetAllAdminByStatusTrue()
         {
             var listAdmin = _unitOfWork.AdminRepository.Get(
-                filter: s => s.Status == true && s.RoleId == 1,
+                filter: s => s.Status == true, 
                 includeProperties: "Role"
             ).ToList();
             var adminResponses = _mapper.Map<IEnumerable<AdminResponse>>(listAdmin);
@@ -57,13 +59,8 @@ namespace GaVietNam_Service.Service
 
                 var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
 
-                if (checkmanager == null || checkmanager.RoleId != 2)
-                {
-                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
-                }
-
                 var listAdmin = _unitOfWork.AdminRepository.Get(
-                    filter: s => s.Status == true && s.RoleId == 0,
+                    filter: s => s.Status == true,
                     includeProperties: "Role"
                 ).ToList();
                 var adminResponses = _mapper.Map<IEnumerable<AdminResponse>>(listAdmin);
@@ -92,13 +89,8 @@ namespace GaVietNam_Service.Service
 
                 var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
 
-                if (checkmanager == null || checkmanager.RoleId != 2)
-                {
-                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
-                }
-
                 var admin = _unitOfWork.AdminRepository.Get(
-                    filter: a => a.Id == id && a.Status == true && a.RoleId == 1, includeProperties: "Role"
+                    filter: a => a.Id == id && a.Status == true, includeProperties: "Role"
                 ).FirstOrDefault();
 
                 if (admin == null)
@@ -135,9 +127,9 @@ namespace GaVietNam_Service.Service
 
                 var admin = _mapper.Map<Admin>(adminRequest);
 
-                admin.Password = authentication.HashPassword(adminRequest.Password);
-                admin.Status = true;
+                admin.Password = EncryptPassword.Encrypt(adminRequest.Password);
                 admin.RoleId = 1;
+                admin.Status = true;
 
                 _unitOfWork.AdminRepository.Insert(admin);
                 _unitOfWork.Save();
@@ -149,6 +141,30 @@ namespace GaVietNam_Service.Service
             {
                 throw ex;
             }
+        }
+
+        public async Task<(string, LoginResponse)> LoginAdmin(GaVietNam_Model.DTO.Request.LoginRequest loginRequest)
+        {
+            string hashedPass = EncryptPassword.Encrypt(loginRequest.Password);
+            IEnumerable<Admin> check = await _unitOfWork.AdminRepository.GetByFilterAsync(x =>
+                x.Username.Equals(loginRequest.UserName)
+                && x.Password.Equals(hashedPass)
+            );
+            if (!check.Any())
+            {
+                throw new CustomException.InvalidDataException(HttpStatusCode.BadRequest.ToString(), $"Username or password error");
+            }
+
+            Admin admin = check.First();
+            if (admin.Status == false)
+            {
+                throw new CustomException.InvalidDataException(HttpStatusCode.BadRequest.ToString(), $"User is not active");
+            }
+
+            LoginResponse loginResponse = _mapper.Map<LoginResponse>(admin);
+            Authentication authentication = new(_configuration, _unitOfWork);
+            string token = authentication.GenerateToken(admin);
+            return (token, loginResponse);
         }
 
         public async Task<AdminResponse> UpdateAdmin(long id, AdminRequest adminRequest)
@@ -196,11 +212,6 @@ namespace GaVietNam_Service.Service
                 }
 
                 var checkmanager = _unitOfWork.AdminRepository.Get(a => a.Id == Id).FirstOrDefault();
-
-                if (checkmanager == null || checkmanager.RoleId != 2)
-                {
-                    throw new CustomException.ForbbidenException("you don't have permission to use it.");
-                }
 
                 var admin = _unitOfWork.AdminRepository.GetByID(id);
                 if (admin == null)

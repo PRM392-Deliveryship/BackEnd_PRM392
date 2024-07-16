@@ -68,7 +68,7 @@ public class GaVietNamContext : DbContext
         //string plaintextPassword = "admin"; // Original password
         //string hashedPassword = HashPassword(plaintextPassword); // Encrypt password using SHA-512
         modelBuilder.Entity<Admin>().HasData(
-                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = "1", Status = true }
+                new Admin { Id = 1, RoleId = 1, Username = "admin", Password = "4DFF4EA340F0A823F15D3F4F01AB62EAE0E5DA579CCB851F8DB9DFE84C58B2B37B89903A740E1EE172DA793A6E79D560E5F7F9BD058A12A280433ED6FA46510A", Status = true }
         );
 
         // Seed data for Contacts

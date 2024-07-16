@@ -54,7 +54,7 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            Password = "1",
+                            Password = "4DFF4EA340F0A823F15D3F4F01AB62EAE0E5DA579CCB851F8DB9DFE84C58B2B37B89903A740E1EE172DA793A6E79D560E5F7F9BD058A12A280433ED6FA46510A",
                             RoleId = 1L,
                             Status = true,
                             Username = "admin"
@@ -186,9 +186,9 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5606),
+                            CreateDate = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3434),
                             Image = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51",
-                            ModifiedDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5628),
+                            ModifiedDate = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3444),
                             Name = "Gà Tam Hoàng",
                             Price = 1000000.0,
                             Status = true,
@@ -197,9 +197,9 @@ namespace GaVietNam_API.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5630),
+                            CreateDate = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3446),
                             Image = "https://firebasestorage.googleapis.com/v0/b/gavietnam-a1894.appspot.com/o/images%2F338fbab9-6937-4109-a246-def8c3dc1947_7-cach-uop-ga-nuong-sieu-ngon-chi-voi-muoi-ot-mat-ong-202112300913287451.jpg?alt=media&token=47f8be10-e2e3-4c73-bcc1-81c17319ef51",
-                            ModifiedDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5630),
+                            ModifiedDate = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3447),
                             Name = "Gà Ta",
                             Price = 2000000.0,
                             Status = true,
@@ -374,7 +374,7 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             AdminId = 1L,
-                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5659),
+                            CreateDate = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3469),
                             OrderCode = "ahihi",
                             OrderRequirement = "ahihi",
                             PaymentMethod = "ahihi",
@@ -551,8 +551,8 @@ namespace GaVietNam_API.Migrations
                         {
                             Id = 1L,
                             Avatar = "https://firebasestorage.googleapis.com/v0/b/GaVietNam-384e4.appspot.com/o/images%2F46822b4c-ad52-49c9-8602-98b1ba92e39c_jingliu-Photoroom.png-Photoroom.png?alt=media&token=277a8993-ec54-4806-9358-de42ae9ce807",
-                            CreateDate = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5720),
-                            Dob = new DateTime(2024, 7, 16, 4, 33, 19, 935, DateTimeKind.Local).AddTicks(5719),
+                            CreateDate = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3506),
+                            Dob = new DateTime(2024, 7, 16, 13, 36, 48, 422, DateTimeKind.Local).AddTicks(3506),
                             Email = "phamdat720749pd@gmail.com",
                             FullName = "Pham Quoc Dat",
                             Gender = "Male",

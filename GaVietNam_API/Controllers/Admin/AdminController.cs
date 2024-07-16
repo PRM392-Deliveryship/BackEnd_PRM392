@@ -1,6 +1,8 @@
 ﻿using CoreApiResponse;
 using GaVietNam_Model.DTO.Request;
+using GaVietNam_Model.DTO.Response;
 using GaVietNam_Service.Interface;
+using GaVietNam_Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,7 @@ namespace GaVietNam_API.Controllers.Admin
     public class AdminController : BaseController
     {
         private readonly IAdminService _adminService;
+        private readonly IAuthenticationService _authenticationService;
 
         public AdminController(IAdminService adminService)
         {
@@ -89,6 +92,32 @@ namespace GaVietNam_API.Controllers.Admin
             }
 
             return CustomResult("Create Successful", result);
+
+        }
+
+        [HttpPost("LoginAdmin")]
+        public async Task<IActionResult> LoginAdmin([FromBody] LoginRequest loginRequest)
+        {
+            try
+            {
+                (string, LoginResponse) tuple = await _adminService.LoginAdmin(loginRequest);
+                if (tuple.Item1 == null)
+                {
+                    return Unauthorized();
+                }
+
+                Dictionary<string, object> result = new()
+                {
+                    { "token", tuple.Item1 },
+                    { "user", tuple.Item2 ?? null }
+                };
+                return CustomResult("Login Success", result, HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+            }
+
 
         }
 
